@@ -1,10 +1,44 @@
 {
-    "source":"assets/fnt/PressStart2P.ttf",
-    "text": "Uniandes",
-    "color":{
-         "r":255,
-         "g":0,
-         "b":0
+  "banner": {
+    "font": "assets/fnt/PressStart2P.ttf",
+    "text": "Galaxy Game",
+    "size": 20,
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255
     },
-    "size": 20
+    "position": {
+      "x": 0,
+      "y": 0
+    }
+  },
+  "keys": {
+    "font": "assets/fnt/PressStart2P.ttf",
+    "text": "Controles: Use las flechas para moverse, click para dispara, P para pausar, Espacio para reanudar",
+    "size": 6,
+    "color": {
+      "r": 255,
+      "g": 0,
+      "b": 0
+    },
+    "position": {
+      "x": 0,
+      "y": 15
+    }
+  },
+  "pause": {
+    "font": "assets/fnt/PressStart2P.ttf",
+    "text": "Paused game",
+    "size": 10,
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "position": {
+      "x": 250,
+      "y": 250
+    }
+  }
 }

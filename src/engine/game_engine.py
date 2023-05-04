@@ -27,7 +27,8 @@ from src.ecs.components.tags.c_tag_bullet import CTagBullet
 
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 
-from src.create.prefab_creator import create_enemy_spawner, create_input_player, create_interface, create_player_square, create_bullet, create_text
+from src.create.prefab_creator import create_enemy_spawner, create_input_player, create_interface, create_player_square, \
+    create_bullet, create_text
 
 
 class GameEngine:
@@ -50,9 +51,6 @@ class GameEngine:
         self.ecs_world = esper.World()
         self.num_bullets = 0
         self.pause = False
-       
-   
-
 
     def _load_config_files(self):
         with open("assets/cfg/window.json", encoding="utf-8") as window_file:
@@ -82,34 +80,18 @@ class GameEngine:
         self._clean()
 
     def _create(self):
-        self._player_entity = create_player_square(self.ecs_world, self.player_cfg, self.level_01_cfg["player_spawn"],self.screen)
+        self._player_entity = create_player_square(self.ecs_world, self.player_cfg, self.level_01_cfg["player_spawn"],
+                                                   self.screen)
         self._player_c_v = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
         self._player_c_t = self.ecs_world.component_for_entity(self._player_entity, CTransform)
         self._player_c_s = self.ecs_world.component_for_entity(self._player_entity, CSurface)
 
         create_enemy_spawner(self.ecs_world, self.level_01_cfg)
         create_input_player(self.ecs_world)
-        create_interface(self.ecs_world,self.interface_cfg,(100,20))
-        create_text(self.ecs_world,"PAUSE",(200,200))
-        info = {}
-        info["source"] = "assets/fnt/PressStart2P.ttf"
-        info["size"]   = 6
-        info["text"]   = "Oprima z para cambiar el fondo por blanco"
-        info["color"]  = {}
-        info["color"]["r"] = 0
-        info["color"]["g"] = 200
-        info["color"]["b"] = 0 
-        create_interface(self.ecs_world,info,(150,60))
-        info_ = {}
-        info_["source"] = "assets/fnt/PressStart2P.ttf"
-        info_["size"]   = 6
-        info_["text"]   = "Oprima k para volver al color inicial"
-        info_["color"]  = {}
-        info_["color"]["r"] = 0
-        info_["color"]["g"] = 200
-        info_["color"]["b"] = 0 
-        create_interface(self.ecs_world,info_,(150,80))
-      
+
+        create_text(self.ecs_world, self.interface_cfg, "banner")
+        create_text(self.ecs_world, self.interface_cfg, "keys")
+        create_text(self.ecs_world, self.interface_cfg, "pause")
 
     def _calculate_time(self):
         self.clock.tick(self.framerate)
@@ -122,17 +104,17 @@ class GameEngine:
                 self.is_running = False
 
     def _update(self):
-        if not self.pause :
+        if not self.pause:
             system_enemy_spawner(self.ecs_world, self.enemies_cfg, self.delta_time)
             system_movement(self.ecs_world, self.delta_time)
 
             system_screen_bounce(self.ecs_world, self.screen)
             system_screen_player(self.ecs_world, self.screen)
             system_screen_bullet(self.ecs_world, self.screen)
-            
 
             system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg)
-            system_collision_player_enemy(self.ecs_world, self._player_entity, self.level_01_cfg, self.explosion_cfg,self.screen)
+            system_collision_player_enemy(self.ecs_world, self._player_entity, self.level_01_cfg, self.explosion_cfg,
+                                          self.screen)
 
             system_explosion_kill(self.ecs_world)
             system_player_state(self.ecs_world)
@@ -142,14 +124,13 @@ class GameEngine:
 
             self.ecs_world._clear_dead_entities()
             self.num_bullets = len(self.ecs_world.get_component(CTagBullet))
- 
+
     def _draw(self):
         self.screen.fill(self.bg_color)
         system_rendering(self.ecs_world, self.screen)
-        system_screen_interface(self.ecs_world,self.screen)
-        if self.pause :
-            system_screen_text(self.ecs_world,self.screen)
-
+        system_screen_interface(self.ecs_world, self.screen)
+        if self.pause:
+            system_screen_text(self.ecs_world, self.screen)
 
         pygame.display.flip()
 
@@ -158,7 +139,7 @@ class GameEngine:
         pygame.quit()
 
     def _do_action(self, c_input: CInputCommand):
-        if not self.pause :
+        if not self.pause:
             if c_input.name == "PLAYER_LEFT":
                 if c_input.phase == CommandPhase.START:
                     self._player_c_v.vel.x -= self.player_cfg["input_velocity"]
@@ -171,13 +152,9 @@ class GameEngine:
                     self._player_c_v.vel.x -= self.player_cfg["input_velocity"]
 
         if c_input.name == "PLAYER_FIRE" and self.num_bullets < self.level_01_cfg["player_spawn"]["max_bullets"]:
-                create_bullet(self.ecs_world, self._player_c_t.pos,
-                            self._player_c_s.area.size, self.bullet_cfg)
-        
-        if c_input.name == "P_DOWN":
-                if c_input.phase == CommandPhase.START:
-                    self.pause = not self.pause
-        
+            create_bullet(self.ecs_world, self._player_c_t.pos,
+                          self._player_c_s.area.size, self.bullet_cfg)
 
-        
-         
+        if c_input.name == "P_DOWN":
+            if c_input.phase == CommandPhase.START:
+                self.pause = not self.pause

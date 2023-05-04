@@ -27,7 +27,7 @@ def _do_enemy_hunter_idle(c_st: CEnemyHunterState, c_a: CAnimation, c_t: CTransf
 
     dist_to_player = c_t.pos.distance_to(pl_t.pos)
     if dist_to_player < hunter_info["distance_start_chase"]:
-        ServiceLocator.sounds_servide.play(hunter_info["sound_chanse"])
+        ServiceLocator.sounds_service.play(hunter_info["sound_chanse"])
         c_st.state = HunterState.CHASE
 
 
