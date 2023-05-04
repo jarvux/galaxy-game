@@ -1,0 +1,10 @@
+{
+    "source":"assets/fnt/PressStart2P.ttf",
+    "text": "Uniandes",
+    "color":{
+         "r":255,
+         "g":0,
+         "b":0
+    },
+    "size": 20
+}
