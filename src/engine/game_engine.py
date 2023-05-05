@@ -4,7 +4,6 @@ import pygame
 import random
 import esper
 from src.ecs.systems.s_animation import system_animation
-from src.ecs.systems.s_background import system_background_spawner
 
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_collision_enemy_bullet import system_collision_enemy_bullet
@@ -133,21 +132,7 @@ class GameEngine:
             system_screen_background(self.ecs_world, self.screen)
             self.ecs_world._clear_dead_entities()
             self.num_bullets = len(self.ecs_world.get_component(CTagBullet))
- 
-            #system_background_spawner(self.ecs_world, self.background_cfg,self.screen)
-            
-            # Se mueve  un pixel hacia abajo
-            self.star_list[0][1]+=1
-            # Si la estrellase mueve más allá del limite inferior de la
-            if self.star_list[0][1] > self.screen.get_height():
-                # La mueve de nuevo a la parte superior de la ventana
-                y=random.randrange(0,self.screen.get_height())     
-                self.star_list[0][1]=y
-                # Da a esta una nueva posición x
-                x=random.randrange(0,self.screen.get_width())
-                self.star_list[0][0]=x
-
-            create_background(self.ecs_world,pygame.Vector2(self.star_list[0][0],self.star_list[0][1]),self.screen)
+            create_background(self.ecs_world,self.screen)
 
     def _draw(self):
         self.screen.fill(self.bg_color)

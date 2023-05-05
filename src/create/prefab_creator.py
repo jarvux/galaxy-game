@@ -56,13 +56,15 @@ def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dic
     world.add_component(enemy_entity, CTagEnemy("Bouncer"))
     ServiceLocator.sounds_service.play(enemy_info["sound"])
 
-def create_background(world: esper.World, pos: pygame.Vector2, screen:pygame.Surface):
+def create_background(world: esper.World, screen:pygame.Surface):
     surface = screen.get_rect()
     start = pygame.Surface((1, 1))
     start.fill((255,255,255))
+    x=random.randrange(0,surface.width)
+    y=random.randrange(0,surface.height)
+    pos = pygame.Vector2(x,y)
     vel_range = random.randrange(0, surface.height)
-    velocity = pygame.Vector2(random.choice([-vel_range, vel_range]),
-                              0)
+    velocity = pygame.Vector2(0, random.choice([-vel_range, vel_range]))
     background_entity = create_sprite(world, pos, velocity, start)
     world.add_component(background_entity, CTagBackground())
     
