@@ -1,6 +1,7 @@
 import asyncio
 import json
 import pygame
+import random
 import esper
 from src.ecs.systems.s_animation import system_animation
 
@@ -11,6 +12,7 @@ from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_input_player import system_input_player
 from src.ecs.systems.s_movement import system_movement
 from src.ecs.systems.s_rendering import system_rendering
+from src.ecs.systems.s_screen_background import system_screen_background
 from src.ecs.systems.s_screen_bounce import system_screen_bounce
 from src.ecs.systems.s_screen_interface import system_screen_interface, system_screen_text
 from src.ecs.systems.s_screen_player import system_screen_player
@@ -27,7 +29,7 @@ from src.ecs.components.tags.c_tag_bullet import CTagBullet
 
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 
-from src.create.prefab_creator import create_enemy_spawner, create_input_player, create_interface, create_player_square, \
+from src.create.prefab_creator import create_background, create_enemy_spawner, create_input_player, create_interface, create_player_square, \
     create_bullet, create_text
 
 
@@ -40,6 +42,11 @@ class GameEngine:
         self.screen = pygame.display.set_mode(
             (self.window_cfg["size"]["w"], self.window_cfg["size"]["h"]),
             pygame.SCALED)
+        self.star_list=[]
+        for i in range(50):
+            x=random.randrange(0,400)
+            y=random.randrange(0,400)
+            self.star_list.append([x,y])
 
         self.clock = pygame.time.Clock()
         self.is_running = False
@@ -88,7 +95,6 @@ class GameEngine:
 
         create_enemy_spawner(self.ecs_world, self.level_01_cfg)
         create_input_player(self.ecs_world)
-
         create_text(self.ecs_world, self.interface_cfg, "banner")
         create_text(self.ecs_world, self.interface_cfg, "keys")
         create_text(self.ecs_world, self.interface_cfg, "pause")
@@ -111,6 +117,7 @@ class GameEngine:
             system_screen_bounce(self.ecs_world, self.screen)
             system_screen_player(self.ecs_world, self.screen)
             system_screen_bullet(self.ecs_world, self.screen)
+           
 
             system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg)
             system_collision_player_enemy(self.ecs_world, self._player_entity, self.level_01_cfg, self.explosion_cfg,
@@ -121,9 +128,11 @@ class GameEngine:
             system_enemy_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg["TypeHunter"])
 
             system_animation(self.ecs_world, self.delta_time)
-
+            
+            system_screen_background(self.ecs_world, self.screen)
             self.ecs_world._clear_dead_entities()
             self.num_bullets = len(self.ecs_world.get_component(CTagBullet))
+            create_background(self.ecs_world,self.screen)
 
     def _draw(self):
         self.screen.fill(self.bg_color)
