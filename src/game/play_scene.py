@@ -26,15 +26,6 @@ class PlayScene(Scene):
     def __init__(self, level_path:str, engine:'src.engine.game_engine.GameEngine') -> None:
         super().__init__(engine)
         self._load_config_files()
-        #with open(level_path) as level_file:
-        #   self.level_cfg = json.load(level_file)
-        #with open("assets/cfg/paddle.json") as paddle_file:
-        #    self.paddle_cfg = json.load(paddle_file)
-        #with open("assets/cfg/ball.json") as ball_file:
-        #    self.ball_cfg = json.load(ball_file)
-        #with open("assets/cfg/blocks.json") as blocks_file:
-        #    self.blocks_cfg = json.load(blocks_file)
-        
         self._paddle_ent = -1
         self._paused = False
 
@@ -65,7 +56,11 @@ class PlayScene(Scene):
         create_input_player(self.ecs_world)
         create_text(self.ecs_world, self.interface_cfg, "banner")
         create_text(self.ecs_world, self.interface_cfg, "keys")
-        create_text(self.ecs_world, self.interface_cfg, "pause")
+        
+        paused_text_ent = create_text(self.ecs_world, self.interface_cfg, "pause")
+        self.p_txt_s = self.ecs_world.component_for_entity(paused_text_ent, CSurface)
+        self.p_txt_s.visible = self._paused
+        
     
     def do_update(self, delta_time: float):
         
@@ -116,3 +111,4 @@ class PlayScene(Scene):
         if action.name == "P_DOWN":
             if action.phase == CommandPhase.START:
                 self._paused = not self._paused
+                self.p_txt_s.visible = self._paused
