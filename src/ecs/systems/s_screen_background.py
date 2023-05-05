@@ -10,6 +10,6 @@ def system_screen_background(world: esper.World, screen: pygame.Surface):
     scr_rect = screen.get_rect()
     components = world.get_components(CTransform, CSurface, CTagBackground)
     for bullet_entity, (c_t, c_s, _) in components:
-        bullet_rect = CSurface.get_area_relativa(c_s.area,c_t.pos)
+        bullet_rect = CSurface.get_area_relative(c_s.area,c_t.pos)
         if not scr_rect.contains(bullet_rect):
             world.delete_entity(bullet_entity)

@@ -172,7 +172,7 @@ def create_text(world: esper.World, interface_config_info: dict, key: str):
     interface_info = interface_config_info[key]
     sz: int = interface_info["size"]
     path = interface_info["font"]
-    font = ServiceLocator.font_service.get(key, path, sz)
+    font = ServiceLocator.fonts_service.get(path, sz)
     color = (interface_info["color"]["r"],
              interface_info["color"]["g"],
              interface_info["color"]["b"])
