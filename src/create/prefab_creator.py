@@ -9,6 +9,7 @@ from src.ecs.components.c_text import CText
 from src.ecs.components.c_text_key import CTextText
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
+from src.ecs.components.tags.c_tag_background import CTagBackground
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_bullet import CTagBullet
@@ -55,7 +56,18 @@ def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dic
     world.add_component(enemy_entity, CTagEnemy("Bouncer"))
     ServiceLocator.sounds_service.play(enemy_info["sound"])
 
+def create_background(world: esper.World, pos: pygame.Vector2, screen:pygame.Surface):
+    surface = screen.get_rect()
+    start = pygame.Surface((1, 1))
+    start.fill((255,255,255))
+    vel_range = random.randrange(0, surface.height)
+    velocity = pygame.Vector2(random.choice([-vel_range, vel_range]),
+                              0)
+    background_entity = create_sprite(world, pos, velocity, start)
+    world.add_component(background_entity, CTagBackground())
+    
 
+    
 def create_enemy_hunter(world: esper.World, pos: pygame.Vector2, enemy_info: dict):
     enemy_surface = ServiceLocator.images_service.get(enemy_info["image"])
     velocity = pygame.Vector2(0, 0)
