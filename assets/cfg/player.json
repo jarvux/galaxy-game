@@ -1,13 +1,13 @@
 {
-    "image": "assets/img/player.png",
+    "image": "assets/img/gaplus.png",
     "animations": {
-        "number_frames": 4,
+        "number_frames": 1,
         "list": [
             {
                 "name": "MOVE",
                 "start": 0,
-                "end": 3,
-                "framerate": 10
+                "end": 0,
+                "framerate": 1
             },
             {
                 "name": "IDLE",
