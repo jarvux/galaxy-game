@@ -1,4 +1,7 @@
 import pygame
+from src.create.prefab_creator import create_background
+from src.ecs.systems.s_movement import system_movement
+from src.ecs.systems.s_screen_background import system_screen_background
 
 from src.engine.scenes.scene import Scene
 from src.create.prefab_creator_interface import TextAlignment, create_text
@@ -17,7 +20,11 @@ class MenuScene(Scene):
         start_game_action = self.ecs_world.create_entity()
         self.ecs_world.add_component(start_game_action,
                                      CInputCommand("START_GAME", pygame.K_z))
-        
+    def do_update(self, delta_time: float):
+        system_screen_background(self.ecs_world, self.screen)
+        system_movement(self.ecs_world, delta_time)
+        create_background(self.ecs_world,self.screen)
+
     def do_action(self, action: CInputCommand):
         if action.name == "START_GAME":
             self.switch_scene("LEVEL_01")
