@@ -23,10 +23,6 @@ class MenuScene(Scene):
         start_game_action = self.ecs_world.create_entity()
         self.ecs_world.add_component(start_game_action,
                                      CInputCommand("START_GAME", pygame.K_z))
-    def do_update(self, delta_time: float):
-        system_screen_background(self.ecs_world, self.screen)
-        system_movement(self.ecs_world, delta_time)
-        create_background(self.ecs_world,self.screen)
 
     def do_action(self, action: CInputCommand):
         if action.name == "START_GAME":
@@ -38,7 +34,7 @@ class MenuScene(Scene):
         create_text(self.ecs_world, "MAIN MENU", 16, 
                     pygame.Color(50, 255, 50), pygame.Vector2(centerx, centery+deltaY+30), TextAlignment.CENTER)
         system_screen_background(self.ecs_world, self.screen)
+        system_movement(self.ecs_world, delta_time)
         self.ecs_world._clear_dead_entities()
-        create_background(self.ecs_world,self.screen)
 
         
