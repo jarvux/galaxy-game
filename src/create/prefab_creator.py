@@ -59,20 +59,22 @@ def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dic
 def create_background(world: esper.World, screen:pygame.Surface, fromAxisX =  False):
     surface = screen.get_rect()
     start = pygame.Surface((1, 1))
-    #Random color
     start.fill((255,255,255))
     if fromAxisX :
         y=0
     else:
         y=random.randrange(0,surface.width)
     x=random.randrange(0,surface.height)
+    r = random.randint(0, 255)
+    g = random.randint(0, 255)
+    b = random.randint(0, 255)
+    start.fill((r,g,b))
     pos = pygame.Vector2(x,y)
     vel_range = random.randrange(0, surface.height)
     velocity = pygame.Vector2(0, vel_range)
     background_entity = create_sprite(world, pos, velocity, start)
     world.add_component(background_entity, CTagBackground())
     
-
     
 def create_enemy_hunter(world: esper.World, pos: pygame.Vector2, enemy_info: dict):
     enemy_surface = ServiceLocator.images_service.get(enemy_info["image"])
@@ -158,17 +160,6 @@ def create_interface(world: esper.World, interfaceinfo: dict, pos: dict):
     pos = pygame.Vector2(pos[0] - text.get_width() // 2, pos[1] - text.get_height() // 2)
     world.add_component(sprite_entity,
                         CText(pos, text))
-    return sprite_entity
-
-
-def create_text_sebas(world: esper.World, text: str, pos: dict):
-    green = (0, 255, 0)
-    font = pygame.font.SysFont("Arial", 36)
-    txtsurf = font.render(text, True, green)
-    sprite_entity = world.create_entity()
-    pos = pygame.Vector2(pos[0] - txtsurf.get_width() // 2, pos[1] - txtsurf.get_height() // 2)
-    world.add_component(sprite_entity,
-                        CTextText(pos, txtsurf))
     return sprite_entity
 
 
