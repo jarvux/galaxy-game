@@ -59,7 +59,6 @@ def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dic
 def create_background(world: esper.World, screen:pygame.Surface, fromAxisX =  False):
     surface = screen.get_rect()
     start = pygame.Surface((1, 1))
-    start.fill((255,255,255))
     if fromAxisX :
         y=0
     else:
