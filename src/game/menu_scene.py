@@ -35,5 +35,3 @@ class MenuScene(Scene):
         if action.name == "START_GAME":
             self.switch_scene("LEVEL_01")
    
-
-        

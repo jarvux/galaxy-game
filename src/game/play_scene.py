@@ -86,7 +86,6 @@ class PlayScene(Scene):
             system_screen_background(self.ecs_world, self.screen)
             self.ecs_world._clear_dead_entities()
             self.num_bullets = len(self.ecs_world.get_component(CTagBullet))
-            create_background(self.ecs_world,self.screen)
 
     def do_clean(self):
         self._paused = False
