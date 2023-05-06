@@ -29,3 +29,26 @@ def create_text(world:esper.World, txt:str, size:int,
     world.add_component(text_entity,
                         CTransform(pos + origin))
     return text_entity
+
+def create_text_dinamic(world:esper.World, txt:str, size:int, 
+                color:pygame.Color, alignment:TextAlignment,screen:pygame.Surface) -> int:
+    font = ServiceLocator.fonts_service.get("assets/fnt/PressStart2P.ttf", size)
+    text_entity = world.create_entity()
+
+    world.add_component(text_entity, CSurface.from_text(txt, font, color))
+    txt_s = world.component_for_entity(text_entity, CSurface)
+
+    # De acuerdo al alineamiento, determia el origine de la superficie
+    origin = pygame.Vector2(0, 0)
+    if alignment is TextAlignment.RIGHT:
+        origin.x -= txt_s.area.right
+    elif alignment is TextAlignment.CENTER:
+        origin.x -= txt_s.area.centerx
+    
+    centerx, centery = screen.get_rect().centerx, screen.get_rect().centery
+    deltaY = centery + 50  # adjust so it goes below screen start
+
+
+    world.add_component(text_entity,
+                        CTransform((centerx, centery+deltaY+30) + origin))
+    return text_entity

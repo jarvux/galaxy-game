@@ -18,12 +18,6 @@ class GameEngine:
         self.screen = pygame.display.set_mode(
             (self._window_cfg["size"]["w"], self._window_cfg["size"]["h"]),
             pygame.SCALED)
-        
-        self.star_list=[]
-        for i in range(50):
-            x=random.randrange(0,400)
-            y=random.randrange(0,400)
-            self.star_list.append([x,y])
 
         self._clock = pygame.time.Clock()
         self.is_running = False
