@@ -63,7 +63,7 @@ def create_background(world: esper.World, screen:pygame.Surface, fromAxisX =  Fa
         y=0
     else:
         y=random.randrange(0,surface.width)
-    x=random.randrange(0,surface.height)
+    x=random.randrange(0,surface.width)
     r = random.randint(0, 255)
     g = random.randint(0, 255)
     b = random.randint(0, 255)
