@@ -1,10 +1,11 @@
 import pygame
 from src.create.prefab_creator import create_background
 from src.ecs.systems.s_movement import system_movement
+from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_screen_background import system_screen_background
 
 from src.engine.scenes.scene import Scene
-from src.create.prefab_creator_interface import TextAlignment, create_text
+from src.create.prefab_creator_interface import TextAlignment, create_text, create_text_dinamic
 from src.ecs.components.c_input_command import CInputCommand 
 
 class MenuScene(Scene):
@@ -13,8 +14,6 @@ class MenuScene(Scene):
 
     def do_create(self):
          
-        create_text(self.ecs_world, "MAIN MENU", 16, 
-                    pygame.Color(50, 255, 50), pygame.Vector2(320, 150), TextAlignment.CENTER)
         create_text(self.ecs_world, "PRESS Z TO START GAME", 11, 
                     pygame.Color(255, 255, 0), pygame.Vector2(320, 210), TextAlignment.CENTER)
         create_text(self.ecs_world, "Arrows to MOVE - P to PAUSE", 8, 
@@ -24,21 +23,17 @@ class MenuScene(Scene):
         self.ecs_world.add_component(start_game_action,
                                      CInputCommand("START_GAME", pygame.K_z))
     def do_update(self, delta_time: float):
-        system_screen_background(self.ecs_world, self.screen)
         system_movement(self.ecs_world, delta_time)
+        system_animation(self.ecs_world, delta_time)
+        create_text_dinamic(self.ecs_world, "MAIN MENU", 16, 
+                    pygame.Color(50, 255, 50), TextAlignment.CENTER,self.screen)
+        system_screen_background(self.ecs_world, self.screen)
+        self.ecs_world._clear_dead_entities()
         create_background(self.ecs_world,self.screen)
 
     def do_action(self, action: CInputCommand):
         if action.name == "START_GAME":
             self.switch_scene("LEVEL_01")
-
-    def do_update(self, delta_time: float):
-        centerx, centery = self.screen.get_rect().centerx, self.screen.get_rect().centery
-        deltaY = centery + 50  # adjust so it goes below screen start
-        create_text(self.ecs_world, "MAIN MENU", 16, 
-                    pygame.Color(50, 255, 50), pygame.Vector2(centerx, centery+deltaY+30), TextAlignment.CENTER)
-        system_screen_background(self.ecs_world, self.screen)
-        self.ecs_world._clear_dead_entities()
-        create_background(self.ecs_world,self.screen)
+   
 
         
