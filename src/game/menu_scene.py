@@ -23,7 +23,6 @@ class MenuScene(Scene):
     def do_update(self, delta_time: float):
         system_screen_background(self.ecs_world, self.screen)
         system_movement(self.ecs_world, delta_time)
-        create_background(self.ecs_world,self.screen)
 
     def do_action(self, action: CInputCommand):
         if action.name == "START_GAME":
