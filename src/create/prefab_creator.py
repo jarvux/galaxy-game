@@ -1,6 +1,7 @@
 import random
 import pygame
 import esper
+from src.ecs.components.c_bullet_state import CBulletState
 
 from src.ecs.components.c_enemy_spawner import CEnemySpawner
 from src.ecs.components.c_input_command import CInputCommand
@@ -98,7 +99,7 @@ def create_player_square(world: esper.World, player_info: dict, player_lvl_info:
     world.add_component(player_entity, CTagPlayer())
     world.add_component(player_entity,
                         CAnimation(player_info["animations"]))
-    world.add_component(player_entity, CPlayerState())
+    world.add_component(player_entity, CPlayerState(player_info["num_lives"]))
     return player_entity
 
 
@@ -124,18 +125,18 @@ def create_input_player(world: esper.World):
                         CInputCommand("PLAYER_FIRE", pygame.K_z))
 
 
-def create_bullet(world: esper.World,
+def create_player_bullet(world: esper.World,
                   player_pos: pygame.Vector2,
                   player_size: pygame.Vector2,
                   bullet_info: dict):
-    bullet_surface = ServiceLocator.images_service.get(bullet_info["image"])
-    bullet_size = bullet_surface.get_rect().size
-    pos = pygame.Vector2(player_pos.x + (player_size[0] / 2) - (bullet_size[0] / 2),
-                         player_pos.y + (player_size[1] / 2) - (bullet_size[1] / 2))
-    vel = ((player_pos.x, 0) - player_pos)
-    vel = vel.normalize() * bullet_info["velocity"]
-    bullet_entity = create_sprite(world, pos, vel, bullet_surface)
+    bullet_size = pygame.Vector2(bullet_info["width"], bullet_info["height"])
+    pos = pygame.Vector2(player_pos.x + (player_size[0] / 2) - (bullet_info["width"] / 2),
+                         player_pos.y - bullet_info["height"])
+    vel = pygame.Vector2(0,0)
+    col = pygame.Color(bullet_info["color"]["r"],bullet_info["color"]["g"],bullet_info["color"]["b"])
+    bullet_entity = create_square(world,bullet_size, pos, vel, col)
     world.add_component(bullet_entity, CTagBullet())
+    world.add_component(bullet_entity, CBulletState())
     ServiceLocator.sounds_service.play(bullet_info["sound"])
 
 

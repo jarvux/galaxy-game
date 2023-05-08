@@ -17,5 +17,6 @@
             }
         ]
     },
-    "input_velocity": 100
+    "input_velocity": 300,
+    "num_lives" : 4
 }
