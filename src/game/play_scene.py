@@ -1,6 +1,6 @@
 import json
 import pygame
-from src.create.prefab_creator import create_background, create_bullet, create_enemy_spawner, create_input_player, create_player_square, create_text
+from src.create.prefab_creator import create_background, create_enemy_spawner, create_input_player, create_player_square, create_text
 from src.ecs.components.tags.c_tag_bullet import CTagBullet
 from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_collision_enemy_bullet import system_collision_enemy_bullet
@@ -8,6 +8,7 @@ from src.ecs.systems.s_collision_player_enemy import system_collision_player_ene
 from src.ecs.systems.s_enemy_hunter_state import system_enemy_hunter_state
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
+from src.ecs.systems.s_player_bullet import system_player_bullet
 from src.ecs.systems.s_player_state import system_player_state
 from src.ecs.systems.s_screen_background import system_screen_background
 from src.ecs.systems.s_screen_bounce import system_screen_bounce
@@ -28,6 +29,7 @@ class PlayScene(Scene):
         self._load_config_files()
         self._paddle_ent = -1
         self._paused = False
+        self._num_lives = self.player_cfg["num_lives"]
 
     def _load_config_files(self):
         with open("assets/cfg/window.json", encoding="utf-8") as window_file:
@@ -68,6 +70,8 @@ class PlayScene(Scene):
             system_enemy_spawner(self.ecs_world, self.enemies_cfg, delta_time)
             system_movement(self.ecs_world, delta_time)
 
+            system_player_bullet(self.ecs_world, self._player_c_t.pos, self._player_c_s.area.size, self.bullet_cfg)
+
             system_screen_bounce(self.ecs_world, self.screen)
             system_screen_player(self.ecs_world, self.screen)
             system_screen_bullet(self.ecs_world, self.screen)
@@ -75,7 +79,7 @@ class PlayScene(Scene):
 
             system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg)
             system_collision_player_enemy(self.ecs_world, self._player_entity, self.level_01_cfg, self.explosion_cfg,
-                                          self.screen)
+                                          self.screen, self._num_lives, self)
 
             system_explosion_kill(self.ecs_world)
             system_player_state(self.ecs_world)
@@ -103,9 +107,13 @@ class PlayScene(Scene):
                 elif action.phase == CommandPhase.END:
                     self._player_c_v.vel.x -= self.player_cfg["input_velocity"]
 
-        if action.name == "PLAYER_FIRE" and self.num_bullets < self.level_01_cfg["player_spawn"]["max_bullets"]:
-            create_bullet(self.ecs_world, self._player_c_t.pos,
-                          self._player_c_s.area.size, self.bullet_cfg)
+        if action.name == "PLAYER_FIRE" and self.num_bullets <= self.level_01_cfg["player_spawn"]["max_bullets"]:
+            self._player_c_v = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
+            components = self.ecs_world.get_components(CVelocity, CTagBullet)
+            print("disparar")
+            for bullet_entity, (c_v, _) in components:
+                c_v.vel = pygame.Vector2(0,-self.bullet_cfg["velocity"])
+
 
         if action.name == "P_DOWN":
             if action.phase == CommandPhase.START:
