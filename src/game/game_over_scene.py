@@ -7,12 +7,12 @@ from src.ecs.components.c_input_command import CInputCommand
 class GameOverScene(Scene):
     
     def do_create(self):
-        create_text(self.ecs_world, "GAME OVER", 16, 
-                    pygame.Color(255, 0, 0), pygame.Vector2(320, 150), TextAlignment.CENTER)
-        create_text(self.ecs_world, "PRESS Z TO TRY AGAIN", 11, 
-                    pygame.Color(255, 255, 0), pygame.Vector2(320, 210), TextAlignment.CENTER)        
-        create_text(self.ecs_world, "PRESS ESC TO GO TO THE MAIN MENU", 11, 
-                    pygame.Color(255, 255, 0), pygame.Vector2(320, 240), TextAlignment.CENTER)        
+        create_text(self.ecs_world, self.screen, "GAME OVER", 16, "assets/fnt/PressStart2P.ttf",
+                    pygame.Color(255, 0, 0), pygame.Vector2(320, 150), "CENTER")
+        create_text(self.ecs_world, self.screen,"PRESS Z TO TRY AGAIN", 11, "assets/fnt/PressStart2P.ttf",
+                    pygame.Color(255, 255, 0), pygame.Vector2(320, 210), "CENTER")        
+        create_text(self.ecs_world, self.screen, "PRESS ESC TO GO TO THE MAIN MENU", 11, "assets/fnt/PressStart2P.ttf",
+                    pygame.Color(255, 255, 0), pygame.Vector2(320, 240), "CENTER")        
         
         start_game_action = self.ecs_world.create_entity()
         self.ecs_world.add_component(start_game_action,

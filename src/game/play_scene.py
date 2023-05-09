@@ -1,6 +1,6 @@
 import json
 import pygame
-from src.create.prefab_creator import create_background, create_enemy_spawner, create_input_player, create_player_square, create_text
+from src.create.prefab_creator import create_enemy_spawner, create_input_player, create_key_text, create_player_square
 from src.ecs.components.tags.c_tag_bullet import CTagBullet
 from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_collision_enemy_bullet import system_collision_enemy_bullet
@@ -22,6 +22,7 @@ from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.systems.s_movement import system_movement
 import src.engine.game_engine
+from src.engine.service_locator import ServiceLocator
 
 class PlayScene(Scene):
     def __init__(self, level_path:str, engine:'src.engine.game_engine.GameEngine') -> None:
@@ -56,10 +57,10 @@ class PlayScene(Scene):
 
         create_enemy_spawner(self.ecs_world, self.level_01_cfg)
         create_input_player(self.ecs_world)
-        create_text(self.ecs_world, self.interface_cfg, "banner")
-        create_text(self.ecs_world, self.interface_cfg, "keys")
+        create_key_text(self.ecs_world, self.interface_cfg, "banner")
+        create_key_text(self.ecs_world, self.interface_cfg, "keys")
         
-        paused_text_ent = create_text(self.ecs_world, self.interface_cfg, "pause")
+        paused_text_ent = create_key_text(self.ecs_world, self.interface_cfg, "pause")
         self.p_txt_s = self.ecs_world.component_for_entity(paused_text_ent, CSurface)
         self.p_txt_s.visible = self._paused
         
@@ -107,12 +108,12 @@ class PlayScene(Scene):
                 elif action.phase == CommandPhase.END:
                     self._player_c_v.vel.x -= self.player_cfg["input_velocity"]
 
-        if action.name == "PLAYER_FIRE" and self.num_bullets <= self.level_01_cfg["player_spawn"]["max_bullets"]:
-            self._player_c_v = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
+        if action.name == "PLAYER_FIRE" and self.num_bullets <= self.level_01_cfg["player_spawn"]["max_bullets"] and action.phase == CommandPhase.START:
             components = self.ecs_world.get_components(CVelocity, CTagBullet)
-            print("disparar")
             for bullet_entity, (c_v, _) in components:
-                c_v.vel = pygame.Vector2(0,-self.bullet_cfg["velocity"])
+                if c_v.vel.magnitude() == 0 :
+                    c_v.vel = pygame.Vector2(0,-self.bullet_cfg["velocity"])
+                    ServiceLocator.sounds_service.play(self.bullet_cfg["sound"])
 
 
         if action.name == "P_DOWN":

@@ -13,5 +13,4 @@ def system_screen_bullet(world: esper.World, screen: pygame.Surface):
     for bullet_entity, (c_t, c_s, c_v, _) in components:
         bullet_rect = c_s.surf.get_rect(topleft=c_t.pos)
         if not scr_rect.contains(bullet_rect) and c_v.vel.magnitude() != 0:
-            print("Eliminar bala")
             world.delete_entity(bullet_entity)

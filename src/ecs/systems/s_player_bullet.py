@@ -12,7 +12,6 @@ from src.ecs.components.tags.c_tag_bullet import CTagBullet
 def system_player_bullet(world: esper.World, player_pos: pygame.Vector2, player_area: pygame.Vector2, bullet_info: dict):
     components = world.get_components(CTransform, CBulletState, CVelocity, CTagBullet)
     if len(components) == 0:
-        print("crear bala")
         create_player_bullet(world, player_pos, player_area, bullet_info)
     else:
         for bullet_entity, (c_t, c_s, c_v, _) in components:
