@@ -1,3 +1,4 @@
+from enum import Enum
 import random
 import pygame
 import esper
@@ -11,6 +12,7 @@ from src.ecs.components.c_text_key import CTextText
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_tag_background import CTagBackground
+from src.ecs.components.tags.c_tag_blink import CTagBlink
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_bullet import CTagBullet
@@ -88,6 +90,7 @@ def create_enemy_hunter(world: esper.World, pos: pygame.Vector2, enemy_info: dic
 
 def create_player_square(world: esper.World, player_info: dict, player_lvl_info: dict, screen: pygame.Surface) -> int:
     player_sprite = ServiceLocator.images_service.get(player_info["image"])
+    player_sprite = pygame.transform.scale_by(player_sprite, player_info["scale"])
     surface = screen.get_rect()
     size = player_sprite.get_size()
     size = (size[0] / player_info["animations"]["number_frames"], size[1])
@@ -137,7 +140,6 @@ def create_player_bullet(world: esper.World,
     bullet_entity = create_square(world,bullet_size, pos, vel, col)
     world.add_component(bullet_entity, CTagBullet())
     world.add_component(bullet_entity, CBulletState())
-    ServiceLocator.sounds_service.play(bullet_info["sound"])
 
 
 def create_explosion(world: esper.World, pos: pygame.Vector2, explosion_info: dict):
@@ -163,7 +165,7 @@ def create_interface(world: esper.World, interfaceinfo: dict, pos: dict):
     return sprite_entity
 
 
-def create_text(world: esper.World, interface_config_info: dict, key: str):
+def create_key_text(world: esper.World, interface_config_info: dict, key: str):
     interface_info = interface_config_info[key]
     sz: int = interface_info["size"]
     path = interface_info["font"]
@@ -174,8 +176,11 @@ def create_text(world: esper.World, interface_config_info: dict, key: str):
     interface_surface = font.render(interface_info["text"], False, color)
     pos = interface_info["position"]
     p = pygame.Vector2(pos["x"], pos["y"])
-    vel = pygame.Vector2(0, 0)
+    velocity = interface_info.get("velocity")
+    vel = pygame.Vector2(0, 0) if velocity is None else pygame.Vector2(velocity["x"], velocity["y"])
 
     entity = create_sprite(world, p, vel, interface_surface)
     world.add_component(entity, CTagText())
     return entity
+
+            

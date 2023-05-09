@@ -1,5 +1,5 @@
 {
-    "image": "assets/img/gaplus.png",
+    "image": "assets/img/invaders_char.png",
     "animations": {
         "number_frames": 1,
         "list": [
@@ -18,5 +18,6 @@
         ]
     },
     "input_velocity": 300,
-    "num_lives" : 4
+    "num_lives" : 4,
+    "scale": 2
 }
