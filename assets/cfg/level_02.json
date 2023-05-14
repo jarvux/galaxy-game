@@ -7,7 +7,7 @@
         "max_bullets": 1
     },
     "position": {
-        "x": 100,
+        "x": 10,
         "y": 50
     },
     "enemy_config": [

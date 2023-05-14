@@ -1,13 +1,13 @@
 {
     "title": "MISO - Introducción a videojuegos",
     "size": {
-        "w": 768,
-        "h": 576
+        "w": 350,
+        "h": 300
     },
     "bg_color": {
         "r": 25,
         "g": 25,
         "b": 25
     },
-    "framerate": 60
+    "framerate": 32
 }

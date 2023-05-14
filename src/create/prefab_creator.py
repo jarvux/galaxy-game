@@ -108,8 +108,7 @@ def create_player_square(world: esper.World, player_info: dict, screen: pygame.S
 
 def create_enemy_spawner(world: esper.World, level_data: dict):
     spawner_entity = world.create_entity()
-    world.add_component(spawner_entity,
-                        CEnemySpawner(level_data["enemy_config"],level_data["enemy_spawn_events"],level_data["position"]))
+    world.add_component(spawner_entity, CEnemySpawner(level_data))
 
 
 def create_input_player(world: esper.World):
