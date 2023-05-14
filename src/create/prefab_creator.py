@@ -88,7 +88,7 @@ def create_enemy_hunter(world: esper.World, pos: pygame.Vector2, enemy_info: dic
     world.add_component(enemy_entity, CTagEnemy("Hunter"))
 
 
-def create_player_square(world: esper.World, player_info: dict, player_lvl_info: dict, screen: pygame.Surface) -> int:
+def create_player_square(world: esper.World, player_info: dict, screen: pygame.Surface) -> int:
     player_sprite = ServiceLocator.images_service.get(player_info["image"])
     player_sprite = pygame.transform.scale_by(player_sprite, player_info["scale"])
     surface = screen.get_rect()
@@ -109,7 +109,7 @@ def create_player_square(world: esper.World, player_info: dict, player_lvl_info:
 def create_enemy_spawner(world: esper.World, level_data: dict):
     spawner_entity = world.create_entity()
     world.add_component(spawner_entity,
-                        CEnemySpawner(level_data["enemy_spawn_events"]))
+                        CEnemySpawner(level_data["enemy_config"],level_data["enemy_spawn_events"],level_data["position"]))
 
 
 def create_input_player(world: esper.World):

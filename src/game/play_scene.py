@@ -27,6 +27,7 @@ from src.engine.service_locator import ServiceLocator
 class PlayScene(Scene):
     def __init__(self, level_path:str, engine:'src.engine.game_engine.GameEngine') -> None:
         super().__init__(engine)
+        self.level_path = level_path
         self._load_config_files()
         self._paddle_ent = -1
         self._paused = False
@@ -35,9 +36,9 @@ class PlayScene(Scene):
     def _load_config_files(self):
         with open("assets/cfg/window.json", encoding="utf-8") as window_file:
             self.window_cfg = json.load(window_file)
-        with open("assets/cfg/enemies.json") as enemies_file:
+        with open("assets/cfg/enemies_2.json") as enemies_file:
             self.enemies_cfg = json.load(enemies_file)
-        with open("assets/cfg/level_01.json") as level_01_file:
+        with open(self.level_path) as level_01_file:
             self.level_01_cfg = json.load(level_01_file)
         with open("assets/cfg/player.json") as player_file:
             self.player_cfg = json.load(player_file)
@@ -49,8 +50,7 @@ class PlayScene(Scene):
             self.interface_cfg = json.load(interface_file)
 
     def do_create(self):
-        self._player_entity = create_player_square(self.ecs_world, self.player_cfg, self.level_01_cfg["player_spawn"],
-                                                   self.screen)
+        self._player_entity = create_player_square(self.ecs_world, self.player_cfg,self.screen)
         self._player_c_v = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
         self._player_c_t = self.ecs_world.component_for_entity(self._player_entity, CTransform)
         self._player_c_s = self.ecs_world.component_for_entity(self._player_entity, CSurface)
@@ -68,7 +68,7 @@ class PlayScene(Scene):
     def do_update(self, delta_time: float):
         
         if not self._paused:
-            system_enemy_spawner(self.ecs_world, self.enemies_cfg, delta_time)
+            system_enemy_spawner(self.ecs_world, self.enemies_cfg,delta_time)
             system_movement(self.ecs_world, delta_time)
 
             system_player_bullet(self.ecs_world, self._player_c_t.pos, self._player_c_s.area.size, self.bullet_cfg)
@@ -84,7 +84,8 @@ class PlayScene(Scene):
 
             system_explosion_kill(self.ecs_world)
             system_player_state(self.ecs_world)
-            system_enemy_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg["TypeHunter"])
+            #TODO: PILAS CREAR DIFERENTES ENEMIGOS
+            system_enemy_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg["1"])
 
             system_animation(self.ecs_world, delta_time)
             
