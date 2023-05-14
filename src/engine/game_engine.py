@@ -31,7 +31,7 @@ class GameEngine:
         self.pause = False
         self._scenes:dict[str, Scene] = {}
         self._scenes["MENU_SCENE"] = MenuScene(self)
-        self._scenes["LEVEL_01"] = PlayScene("assets/cfg/level_01.json", self)
+        self._scenes["LEVEL_01"] = PlayScene("assets/cfg/level_02.json", self)
         self._scenes["WIN_SCENE"] = WinScene(self)
         self._scenes["GAME_OVER_SCENE"] = GameOverScene(self)
         self._current_scene:Scene = None
