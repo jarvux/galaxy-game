@@ -1,5 +1,5 @@
 {
-    "sound":"assets/snd/laser.ogg",
+    "sound":"assets/snd/player_shoot.ogg",
     "image": "assets/img/bullet.png",
     "velocity": 240,
     "height": 4 ,

@@ -2,6 +2,7 @@
 
     "1" : {
         "image": "assets/img/invaders_enemy_04.png",
+        "score": 60,
         "animations": {
             "number_frames": 1,
             "list": [
@@ -9,7 +10,7 @@
                     "name": "MOVE",
                     "start": 0,
                     "end": 0,
-                    "framerate": 10
+                    "framerate": 20
                 },
                 {
                     "name": "IDLE",
@@ -19,6 +20,12 @@
                 }
             ]
         },
+        "velocity_waiting":
+        {
+            "x": -20,
+            "y":0
+        },
+        "return_magnitude": 50,
         "velocity_chase": 75,
         "velocity_return": 100,
         "distance_start_chase": 100,
@@ -27,6 +34,8 @@
     },
     "2" : {
         "image": "assets/img/invaders_enemy_03.png",
+        "score": 50,
+        "scale": 1.1538,
         "animations": {
             "number_frames": 5,
             "list": [
@@ -34,7 +43,7 @@
                     "name": "MOVE",
                     "start": 0,
                     "end": 4,
-                    "framerate": 10
+                    "framerate": 20
                 },
                 {
                     "name": "IDLE",
@@ -44,6 +53,12 @@
                 }
             ]
         },
+        "velocity_waiting":
+        {
+            "x": -20,
+            "y":0
+        },
+        "return_magnitude": 50,
         "velocity_chase": 75,
         "velocity_return": 100,
         "distance_start_chase": 100,
@@ -59,7 +74,7 @@
                     "name": "MOVE",
                     "start": 0,
                     "end": 4,
-                    "framerate": 10
+                    "framerate": 20
                 },
                 {
                     "name": "IDLE",
@@ -69,6 +84,13 @@
                 }
             ]
         },
+        "score": 40,
+        "velocity_waiting":
+        {
+            "x": -20,
+            "y":0
+        },
+        "return_magnitude": 50,
         "velocity_chase": 75,
         "velocity_return": 100,
         "distance_start_chase": 100,
@@ -77,6 +99,7 @@
     },
     "4" : {
         "image": "assets/img/invaders_enemy_01.png",
+        "scale": 1.3636,
         "animations": {
             "number_frames": 5,
             "list": [
@@ -84,7 +107,7 @@
                     "name": "MOVE",
                     "start": 0,
                     "end": 4,
-                    "framerate": 10
+                    "framerate": 20
                 },
                 {
                     "name": "IDLE",
@@ -94,6 +117,13 @@
                 }
             ]
         },
+        "score": 30,
+        "velocity_waiting":
+        {
+            "x": -20,
+            "y":0
+        },
+        "return_magnitude": 50,
         "velocity_chase": 75,
         "velocity_return": 100,
         "distance_start_chase": 100,

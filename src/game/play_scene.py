@@ -1,11 +1,14 @@
 import json
+import time
 import pygame
 from src.create.prefab_creator import create_enemy_spawner, create_input_player, create_key_text, create_player_square
+from src.create.prefab_creator_interface import create_menu
 from src.ecs.components.tags.c_tag_bullet import CTagBullet
 from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_collision_enemy_bullet import system_collision_enemy_bullet
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_enemy_hunter_random import system_enemy_hunter_random
+from src.ecs.systems.s_enemies_count import system_enemies_count
 from src.ecs.systems.s_enemy_hunter_state import system_enemy_hunter_state
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
@@ -16,6 +19,7 @@ from src.ecs.systems.s_screen_bounce import system_screen_bounce
 from src.ecs.systems.s_screen_bullet import system_screen_bullet
 from src.ecs.systems.s_screen_player import system_screen_player
 from src.ecs.systems.s_screen_return import system_screen_return_home
+from src.ecs.systems.s_surface_blink import system_surface_blink
 
 from src.engine.scenes.scene import Scene
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
@@ -36,63 +40,82 @@ class PlayScene(Scene):
         self._num_lives = self.player_cfg["num_lives"]
 
     def _load_config_files(self):
-        with open("assets/cfg/window.json", encoding="utf-8") as window_file:
-            self.window_cfg = json.load(window_file)
-        with open("assets/cfg/enemies_2.json") as enemies_file:
-            self.enemies_cfg = json.load(enemies_file)
-        with open(self.level_path) as level_01_file:
-            self.level_01_cfg = json.load(level_01_file)
-        with open("assets/cfg/player.json") as player_file:
-            self.player_cfg = json.load(player_file)
-        with open("assets/cfg/bullet.json") as bullet_file:
-            self.bullet_cfg = json.load(bullet_file)
-        with open("assets/cfg/explosion.json") as explosion_file:
-            self.explosion_cfg = json.load(explosion_file)
-        with open("assets/cfg/interface.json") as interface_file:
-            self.interface_cfg = json.load(interface_file)
+        self.window_cfg = ServiceLocator.configs_service.get("assets/cfg/window.json")
+        self.enemies_cfg = ServiceLocator.configs_service.get("assets/cfg/enemies_2.json")
+        self.level_01_cfg = ServiceLocator.configs_service.get(self.level_path)
+        self.player_cfg = ServiceLocator.configs_service.get("assets/cfg/player.json")
+        self.bullet_cfg = ServiceLocator.configs_service.get("assets/cfg/bullet.json")
+        self.explosion_cfg = ServiceLocator.configs_service.get("assets/cfg/explosion.json")
+        self.interface_cfg = ServiceLocator.configs_service.get("assets/cfg/interface.json")
 
     def do_create(self):
+        
         self._player_entity = create_player_square(self.ecs_world, self.player_cfg,self.screen)
         self._player_c_v = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
         self._player_c_t = self.ecs_world.component_for_entity(self._player_entity, CTransform)
         self._player_c_s = self.ecs_world.component_for_entity(self._player_entity, CSurface)
 
-        create_enemy_spawner(self.ecs_world, self.level_01_cfg,self.screen)
         create_input_player(self.ecs_world)
-        create_key_text(self.ecs_world, self.interface_cfg, "banner")
-        create_key_text(self.ecs_world, self.interface_cfg, "keys")
         
-        paused_text_ent = create_key_text(self.ecs_world, self.interface_cfg, "pause")
+        # Texts + images
+        self.conttrol_items = create_menu(self.ecs_world, self.interface_cfg, self.screen)
+        paused_text_ent = self.conttrol_items["pause"]
         self.p_txt_s = self.ecs_world.component_for_entity(paused_text_ent, CSurface)
         self.p_txt_s.visible = self._paused
+        
+        # This is for start
+        ServiceLocator.sounds_service.play(self.window_cfg["start"]["sound"])
+        self.start = True
+        self.timestamp = time.time()
         
     
     def do_update(self, delta_time: float):
         
-        if not self._paused:
-            system_enemy_spawner(self.ecs_world, self.enemies_cfg,delta_time)
-            system_movement(self.ecs_world, delta_time)
+        system_screen_background(self.ecs_world, self.screen)
+        if self.start:
+            diff = time.time() - self.timestamp
 
-            system_player_bullet(self.ecs_world, self._player_c_t.pos, self._player_c_s.area.size, self.bullet_cfg)
+        if self.start and diff >= self.window_cfg["start"]["waiting_time"]:
+            create_enemy_spawner(self.ecs_world, self.level_01_cfg, self.enemies_cfg, self.screen)
+            self.start = False
+            game_start = self.ecs_world.component_for_entity(self.conttrol_items["game_start"], CSurface)
+            game_start.visible = False
 
-            system_screen_bounce(self.ecs_world, self.screen)
+        elif not self.start:
+            if not self._paused:
+                system_enemy_spawner(self.ecs_world, self.enemies_cfg,delta_time)
+                system_movement(self.ecs_world, delta_time)
+                system_player_bullet(self.ecs_world, self._player_c_t.pos, self._player_c_s.area.size, self.bullet_cfg)
+
+                system_screen_bounce(self.ecs_world, self.screen)
+                system_screen_player(self.ecs_world, self.screen)
+                system_screen_bullet(self.ecs_world, self.screen)
+            
+
+                system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg, self.conttrol_items["score"], self.conttrol_items["hi-score"])
+                system_collision_player_enemy(self.ecs_world, self._player_entity, self.level_01_cfg, self.explosion_cfg,
+                                            self.screen, self._num_lives, self)
+                
+                system_explosion_kill(self.ecs_world)
+                system_player_state(self.ecs_world)
+                #TODO: PILAS CREAR DIFERENTES ENEMIGOS
+                system_enemy_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg["4"])
+                system_enemy_hunter_random(self.ecs_world, self._player_entity, self.enemies_cfg["4"])
+                system_screen_return_home(self.ecs_world, self.screen)
+                system_enemy_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg)
+
+                system_animation(self.ecs_world, delta_time)
+                
+            else:
+                system_surface_blink(self.ecs_world)
+            
+            system_enemies_count(self.ecs_world,  self.level_01_cfg, self.enemies_cfg, self.screen, self.conttrol_items["level"])
+        else:
             system_screen_player(self.ecs_world, self.screen)
-            system_screen_bullet(self.ecs_world, self.screen)
-           
-
-            system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg)
-            system_collision_player_enemy(self.ecs_world, self._player_entity, self.level_01_cfg, self.explosion_cfg,self.screen, self._num_lives, self)
-
-            system_explosion_kill(self.ecs_world)
-            system_player_state(self.ecs_world)
-            #TODO: PILAS CREAR DIFERENTES ENEMIGOS
-            system_enemy_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg["4"])
-            system_enemy_hunter_random(self.ecs_world, self._player_entity, self.enemies_cfg["4"])
-            system_animation(self.ecs_world, delta_time)
-            system_screen_return_home(self.ecs_world, self.screen)
-            system_screen_background(self.ecs_world, self.screen)
-            self.ecs_world._clear_dead_entities()
-            self.num_bullets = len(self.ecs_world.get_component(CTagBullet))
+            system_player_bullet(self.ecs_world, self._player_c_t.pos, self._player_c_s.area.size, self.bullet_cfg)
+            system_movement(self.ecs_world, delta_time)
+        self.ecs_world._clear_dead_entities()
+        self.num_bullets = len(self.ecs_world.get_component(CTagBullet))
 
     def do_clean(self):
         self._paused = False
@@ -122,3 +145,6 @@ class PlayScene(Scene):
             if action.phase == CommandPhase.START:
                 self._paused = not self._paused
                 self.p_txt_s.visible = self._paused
+                if self._paused:
+                    ServiceLocator.sounds_service.play(self.window_cfg["pause"]["sound"])
+                    

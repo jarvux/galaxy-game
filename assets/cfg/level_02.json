@@ -7,25 +7,45 @@
         "max_bullets": 1
     },
     "position": {
-        "x": 10,
-        "y": 50
+        "x": 30,
+        "y": 40
+    },
+    "delta": {
+        "x": 15,
+        "y": 14
     },
     "enemy_config": [
         {
             "time": 0.0,
-            "enemy_type": 1
+            "enemy_type": 1,
+            "velocity": {
+                "x": -100,
+                "y": 0
+            }
         },
         {
             "time": 0.0,
-            "enemy_type": 2
+            "enemy_type": 2,
+            "velocity": {
+                "x": -100,
+                "y": 0
+            }
         },
         {
             "time": 0.0,
-            "enemy_type": 3
+            "enemy_type": 3,
+            "velocity": {
+                "x": -100,
+                "y": 0
+            }
         },
         {
             "time": 0.0,
-            "enemy_type": 4
+            "enemy_type": 4,
+            "velocity": {
+                "x": -100,
+                "y": 0
+            }
         }
     ],
     "enemy_spawn_events": [[0,0,0,1,0,0,1,0,0,0],

@@ -1,98 +1,102 @@
 {
-    "line1": {
-      "type": "text",
-      "font": "assets/fnt/Emulogic-zrEw.ttf",
-      "text": "1UP       HI-SCORE          ",
-      "size": 7,
-      "color": {
-        "r": 255,
-        "g": 0,
-        "b": 0
-      },
-      "position": {
-        "x": 0,
-        "y": 40
-      },
-      "velocity": {
-        "x": 0,
-        "y": -100
-      },
-      "alignment": "CENTER"
+  "line1": {
+    "type": "text",
+    "font": "assets/fnt/Emulogic-zrEw.ttf",
+    "text": "1UP       HI-SCORE          ",
+    "size": 7,
+    "color": {
+      "r": 255,
+      "g": 0,
+      "b": 0
     },
-    "line2left": {
-        "type": "text",
-        "font": "assets/fnt/Emulogic-zrEw.ttf",
-        "text": "00",
-        "size": 7,
-        "color": {
-          "r": 255,
-          "g": 255,
-          "b": 255
-        },
-        "position": {
-          "x": 0,
-          "y": 60
-        },
-        "velocity": {
-          "x": 0,
-          "y": -100
-        },
-        "alignment": "LEFT"
+    "position": {
+      "x": 0,
+      "y": 40
     },
-    "line2center": {
-        "type": "text",
-        "font": "assets/fnt/Emulogic-zrEw.ttf",
-        "text": "5000",
-        "size":7,
-        "color": {
-          "r": 69,
-          "g": 142,
-          "b": 247
-        },
-        "position": {
-          "x": 0,
-          "y": 60
-        },
-        "velocity": {
-          "x": 0,
-          "y": -100
-        },
-        "alignment": "CENTER"
+    "velocity": {
+      "x": 0,
+      "y": -100
     },
-    "line3": {
-        "type": "image",
-        "image": "assets/img/invaders_logo_title.png",
-        "scale": 1,
-        "position": {
-          "x": 0,
-          "y": 120
-        },
-        "velocity": {
-          "x": 0,
-          "y": -100
-        },
-        "alignment": "CENTER"
-      },
-      "line4": {
-        "type": "text",
-        "font": "assets/fnt/Emulogic-zrEw.ttf",
-        "text": "PRESS Z TO START",
-        "size": 7,
-        "color": {
-          "r": 255,
-          "g": 0,
-          "b": 0
-        },
-        "position": {
-          "x": 0,
-          "y": 200
-        },
-        "velocity": {
-          "x": 0,
-          "y": -100
-        },
-        "alignment": "CENTER",
-        "blink_time": 0.4
-      }
+    "alignment_x": 0.5,
+    "start": "BOTTOM"
+  },
+  "line2left": {
+    "type": "text",
+    "font": "assets/fnt/Emulogic-zrEw.ttf",
+    "text": "00",
+    "size": 7,
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "position": {
+      "x": 0,
+      "y": 60
+    },
+    "velocity": {
+      "x": 0,
+      "y": -100
+    },
+    "alignment_x": 0.25,
+    "start": "BOTTOM"
+  },
+  "line2center": {
+    "type": "text",
+    "font": "assets/fnt/Emulogic-zrEw.ttf",
+    "text": "5000",
+    "size": 7,
+    "color": {
+      "r": 69,
+      "g": 142,
+      "b": 247
+    },
+    "position": {
+      "x": 0,
+      "y": 60
+    },
+    "velocity": {
+      "x": 0,
+      "y": -100
+    },
+    "alignment_x": 0.5,
+    "start": "BOTTOM"
+  },
+  "line3": {
+    "type": "image",
+    "image": "assets/img/invaders_logo_title.png",
+    "scale": 1,
+    "position": {
+      "x": 0,
+      "y": 120
+    },
+    "velocity": {
+      "x": 0,
+      "y": -100
+    },
+    "alignment_x": 0.5,
+    "start": "BOTTOM"
+  },
+  "line4": {
+    "type": "text",
+    "font": "assets/fnt/Emulogic-zrEw.ttf",
+    "text": "PRESS Z TO START",
+    "size": 7,
+    "color": {
+      "r": 255,
+      "g": 0,
+      "b": 0
+    },
+    "position": {
+      "x": 0,
+      "y": 200
+    },
+    "velocity": {
+      "x": 0,
+      "y": -100
+    },
+    "alignment_x": 0.5,
+    "blink_time": 0.4,
+    "start": "BOTTOM"
   }
-  
+}

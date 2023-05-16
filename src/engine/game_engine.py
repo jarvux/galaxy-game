@@ -1,9 +1,11 @@
+import asyncio
 import json
 import pygame
 import random
 
 from src.ecs.components.c_input_command import CInputCommand
 from src.engine.scenes.scene import Scene
+from src.engine.service_locator import ServiceLocator
 from src.game.game_over_scene import GameOverScene
 from src.game.menu_scene import MenuScene
 from src.game.play_scene import PlayScene
@@ -11,8 +13,7 @@ from src.game.win_scene import WinScene
 
 class GameEngine:
     def __init__(self) -> None:
-        with open("assets/cfg/window.json", encoding="utf-8") as window_file:
-            self._window_cfg = json.load(window_file)        
+        self._window_cfg = ServiceLocator.configs_service.get("assets/cfg/window.json")
         pygame.init()
         pygame.display.set_caption(self._window_cfg["title"])
         self.screen = pygame.display.set_mode(
@@ -37,7 +38,7 @@ class GameEngine:
         self._current_scene:Scene = None
         self._scene_name_to_switch:str = None
 
-    def run(self, start_scene_name:str) -> None:
+    async def run(self, start_scene_name:str) -> None:
         self.is_running = True
         self._current_scene = self._scenes[start_scene_name]
         self._create()
@@ -47,6 +48,7 @@ class GameEngine:
             self._update()
             self._draw()
             self._handle_switch_scene()
+            await asyncio.sleep(0)
         self._do_clean()
 
     def switch_scene(self, new_scene_name:str):
