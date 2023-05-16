@@ -13,3 +13,4 @@ class HunterState(Enum):
     IDLE = 0
     CHASE = 1
     RETURN = 2
+    RETURN_HOME = 3
