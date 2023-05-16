@@ -1,12 +1,12 @@
 {
     "sound":"assets/snd/laser.ogg",
     "image": "assets/img/bullet.png",
-    "velocity": 800,
-    "height": 10 ,
-    "width": 2,
+    "velocity": 200,
+    "height": 4 ,
+    "width": 1,
     "color": {
-        "r": 153,
-        "g": 125,
-        "b": 90
+        "r": 255,
+        "g": 255,
+        "b": 0
       }
 }

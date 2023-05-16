@@ -55,7 +55,7 @@ class PlayScene(Scene):
         self._player_c_t = self.ecs_world.component_for_entity(self._player_entity, CTransform)
         self._player_c_s = self.ecs_world.component_for_entity(self._player_entity, CSurface)
 
-        create_enemy_spawner(self.ecs_world, self.level_01_cfg)
+        create_enemy_spawner(self.ecs_world, self.level_01_cfg,self.screen)
         create_input_player(self.ecs_world)
         create_key_text(self.ecs_world, self.interface_cfg, "banner")
         create_key_text(self.ecs_world, self.interface_cfg, "keys")

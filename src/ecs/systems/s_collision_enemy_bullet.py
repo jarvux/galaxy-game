@@ -12,7 +12,6 @@ from src.create.prefab_creator import create_explosion
 def system_collision_enemy_bullet(world: esper.World, explosion_info: dict):
     components_enemy = world.get_components(CSurface, CTransform, CTagEnemy)
     components_bullet = world.get_components(CSurface, CTransform, CTagBullet)
-
     for enemy_entity, (c_s, c_t, c_ene) in components_enemy:
         ene_rect = c_s.area.copy()
         ene_rect.topleft = c_t.pos
