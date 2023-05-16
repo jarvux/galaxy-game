@@ -90,7 +90,7 @@ def create_enemy_hunter(world: esper.World, pos: pygame.Vector2, enemy_info: dic
 
 def create_player_square(world: esper.World, player_info: dict, screen: pygame.Surface) -> int:
     player_sprite = ServiceLocator.images_service.get(player_info["image"])
-    player_sprite = pygame.transform.scale_by(player_sprite, player_info["scale"])
+    #player_sprite = pygame.transform.scale_by(player_sprite, player_info["scale"])
     surface = screen.get_rect()
     size = player_sprite.get_size()
     size = (size[0] / player_info["animations"]["number_frames"], size[1])
@@ -106,9 +106,9 @@ def create_player_square(world: esper.World, player_info: dict, screen: pygame.S
     return player_entity
 
 
-def create_enemy_spawner(world: esper.World, level_data: dict):
+def create_enemy_spawner(world: esper.World, level_data: dict,screen: pygame.Surface):
     spawner_entity = world.create_entity()
-    world.add_component(spawner_entity, CEnemySpawner(level_data))
+    world.add_component(spawner_entity, CEnemySpawner(level_data,screen))
 
 
 def create_input_player(world: esper.World):
@@ -144,7 +144,7 @@ def create_player_bullet(world: esper.World,
 def create_explosion(world: esper.World, pos: pygame.Vector2, explosion_info: dict):
     explosion_surface = ServiceLocator.images_service.get(explosion_info["image"])
     vel = pygame.Vector2(0, 0)
-
+    pos = pygame.Vector2(pos[0]-10 , pos[1]-5 )
     explosion_entity = create_sprite(world, pos, vel, explosion_surface)
     world.add_component(explosion_entity, CTagExplosion())
     world.add_component(explosion_entity,

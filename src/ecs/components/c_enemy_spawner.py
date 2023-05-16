@@ -2,14 +2,16 @@ import pygame
 
 
 class CEnemySpawner:
-     def __init__(self, level_data: dict) -> None:
+     def __init__(self, level_data: dict,screen: pygame.Surface) -> None:
         self.current_time: float = 0
         self.spawn_event_data: list[SpawnEventData] = []
+        surface = screen.get_rect()
+        position_x =  (surface.width/2)-((len(level_data["enemy_spawn_events"])/2)*55)+74
         row_position = level_data["position"]["x"]
         colum_position = level_data["position"]["y"]
         for row in level_data["enemy_spawn_events"]:
             row_position += 17
-            colum_position = 0
+            colum_position = position_x
             for column in row:
                 enemy_type = column
                 colum_position += 15
