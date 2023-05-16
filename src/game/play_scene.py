@@ -99,8 +99,7 @@ class PlayScene(Scene):
                 system_explosion_kill(self.ecs_world)
                 system_player_state(self.ecs_world)
                 #TODO: PILAS CREAR DIFERENTES ENEMIGOS
-                system_enemy_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg["4"])
-                system_enemy_hunter_random(self.ecs_world, self._player_entity, self.enemies_cfg["4"])
+                system_enemy_hunter_random(self.ecs_world, self._player_entity, self.enemies_cfg)
                 system_screen_return_home(self.ecs_world, self.screen)
                 system_enemy_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg)
 
