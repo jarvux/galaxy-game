@@ -55,11 +55,11 @@ def _do_enemy_hunter_return(c_st: CEnemyHunterState, c_a: CAnimation,
 def _do_enemy_hunter_return_home(c_st: CEnemyHunterState, c_a: CAnimation,
                             c_t: CTransform, c_v: CVelocity, hunter_info: dict):
     set_animation(c_a, "MOVE")
-    c_v.vel = (c_st.start_pos - c_t.pos).normalize() * hunter_info["velocity_return"]
+    c_v.vel = (c_st.start_pos - c_t.pos).normalize() 
     dist_to_origin = c_st.start_pos.distance_to(c_t.pos)
-    if dist_to_origin <= 2:
-        c_t.pos.xy += c_st.start_pos.xy
-        c_st.state = HunterState.IDLE
+    #if dist_to_origin <= 2:
+    #    c_t.pos.xy += c_st.start_pos.xy
+    #    c_st.state = HunterState.IDLE
     
 
 
