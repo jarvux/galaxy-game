@@ -17,7 +17,8 @@
         "x": 0,
         "y": -100
       },
-      "alignment": "CENTER"
+      "alignment_x": 0.5,
+      "start": "BOTTOM"
     },
     "line2left": {
         "type": "text",
@@ -37,7 +38,8 @@
           "x": 0,
           "y": -100
         },
-        "alignment": "LEFT"
+        "alignment_x": 0.25,
+        "start": "BOTTOM"
     },
     "line2center": {
         "type": "text",
@@ -57,7 +59,8 @@
           "x": 0,
           "y": -100
         },
-        "alignment": "CENTER"
+        "alignment_x": 0.5,
+        "start": "BOTTOM"
     },
     "line3": {
         "type": "image",
@@ -71,7 +74,8 @@
           "x": 0,
           "y": -100
         },
-        "alignment": "CENTER"
+        "alignment_x": 0.5,
+        "start": "BOTTOM"
       },
       "line4": {
         "type": "text",
@@ -91,8 +95,9 @@
           "x": 0,
           "y": -100
         },
-        "alignment": "CENTER",
-        "blink_time": 0.4
+        "alignment_x": 0.5,
+        "blink_time": 0.4,
+        "start": "BOTTOM"
       }
   }
   
