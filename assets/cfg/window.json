@@ -9,5 +9,12 @@
         "g": 25,
         "b": 25
     },
-    "framerate": 64
+    "framerate": 64,
+    "pause": {
+        "sound": "assets/snd/game_paused.ogg"
+    },
+    "start": {
+        "sound": "assets/snd/game_start.ogg",
+        "waiting_time": 2
+    }
 }

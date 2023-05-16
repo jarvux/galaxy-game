@@ -1,4 +1,5 @@
 from enum import Enum
+import json
 import random
 import pygame
 import esper
@@ -201,6 +202,21 @@ def update_hi_score(world: esper.World, new_score: int, hi_score_entity:int):
         txt_s = world.component_for_entity(hi_score_entity, CSurface)
         txt_t.text = str(new_score)
         txt_s.update_text(str(new_score))
+        
+        # Writing new scores in the files
+        interface_info = ServiceLocator.configs_service.get("assets/cfg/interface.json")
+        menu_info = ServiceLocator.configs_service.get("assets/cfg/menu.json")
+        interface_info["hi-score"]["text"]=str(new_score)
+        menu_info["line2center"]["text"]=str(new_score)
+
+        with open("assets/cfg/interface.json", "w") as write_file:
+            json.dump(interface_info, write_file)
+        with open("assets/cfg/menu.json", "w") as write_file:
+            json.dump(menu_info, write_file)
+
+        ServiceLocator.configs_service.update("assets/cfg/interface.json", interface_info)
+        ServiceLocator.configs_service.update("assets/cfg/menu.json", menu_info)
+        
         return new_score
     
 def update_level(world: esper.World, level_entity: int):
