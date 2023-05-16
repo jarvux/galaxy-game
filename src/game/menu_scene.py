@@ -8,8 +8,9 @@ from src.ecs.systems.s_stop_menu import system_stop_menu
 from src.ecs.systems.s_surface_blink import system_surface_blink
 
 from src.engine.scenes.scene import Scene
-from src.create.prefab_creator_interface import TextAlignment, create_menu
-from src.ecs.components.c_input_command import CInputCommand 
+from src.create.prefab_creator_interface import  create_menu
+from src.ecs.components.c_input_command import CInputCommand
+from src.engine.service_locator import ServiceLocator 
 
 class MenuScene(Scene):
     def __init__(self,engine:'src.engine.game_engine.GameEngine') -> None:
@@ -17,8 +18,7 @@ class MenuScene(Scene):
         super().__init__(engine)
 
     def _load_config_files(self):
-        with open("assets/cfg/menu.json", encoding="utf-8") as menu_file:
-            self.menu_cfg = json.load(menu_file)
+        self.menu_cfg = ServiceLocator.configs_service.get("assets/cfg/menu.json")
 
     def do_create(self):
         create_menu(self.ecs_world, self.menu_cfg, self.screen)

@@ -16,41 +16,41 @@
     "alignment_x": 0.5
   },
   "score": {
-      "type": "text",
-      "font": "assets/fnt/Emulogic-zrEw.ttf",
-      "text": "00",
-      "size": 7,
-      "color": {
-        "r": 255,
-        "g": 255,
-        "b": 255
-      },
-      "position": {
-        "x": 0,
-        "y": 20
-      },
-      "alignment_x": 0.25
+    "type": "text",
+    "font": "assets/fnt/Emulogic-zrEw.ttf",
+    "text": "00",
+    "size": 7,
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "position": {
+      "x": 0,
+      "y": 20
+    },
+    "alignment_x": 0.25
   },
   "hi-score": {
-      "type": "text",
-      "font": "assets/fnt/Emulogic-zrEw.ttf",
-      "text": "5000",
-      "size":7,
-      "color": {
-        "r": 69,
-        "g": 142,
-        "b": 247
-      },
-      "position": {
-        "x": 0,
-        "y": 20
-      },
-      "alignment_x": 0.5
+    "type": "text",
+    "font": "assets/fnt/Emulogic-zrEw.ttf",
+    "text": "5000",
+    "size": 7,
+    "color": {
+      "r": 69,
+      "g": 142,
+      "b": 247
+    },
+    "position": {
+      "x": 0,
+      "y": 20
+    },
+    "alignment_x": 0.5
   },
   "live-01": {
     "type": "image",
     "image": "assets/img/invaders_life.png",
-    "alignment_x": 0.60,
+    "alignment_x": 0.6,
     "position": {
       "x": 0,
       "y": 20
@@ -88,7 +88,7 @@
     "type": "text",
     "font": "assets/fnt/Emulogic-zrEw.ttf",
     "text": "01",
-    "size":7,
+    "size": 7,
     "color": {
       "r": 255,
       "g": 255,
@@ -99,25 +99,40 @@
       "y": 20
     },
     "alignment_x": 0.75
-},
-
-"pause": {
-  "type": "text",
-  "font": "assets/fnt/PressStart2P.ttf",
-  "text": "PAUSE",
-  "size": 10,
-  "color": {
-    "r": 255,
-    "g": 0,
-    "b": 0
   },
-  "position": {
-    "x": 0,
-    "y": 100
+  "pause": {
+    "type": "text",
+    "font": "assets/fnt/PressStart2P.ttf",
+    "text": "PAUSE",
+    "size": 10,
+    "color": {
+      "r": 255,
+      "g": 0,
+      "b": 0
+    },
+    "position": {
+      "x": 0,
+      "y": 100
+    },
+    "blink_time": 0.4,
+    "alignment_x": 0.5,
+    "alignment_y": 0.65
   },
-  "blink_time": 0.4,
-  "alignment_x": 0.5,
-  "alignment_y": 0.65
+  "game_start": {
+    "type": "text",
+    "font": "assets/fnt/PressStart2P.ttf",
+    "text": "GAME START",
+    "size": 10,
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "alignment_x": 0.5,
+    "alignment_y": 0.6
+  }
 }
-}
-
