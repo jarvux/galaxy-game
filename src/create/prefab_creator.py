@@ -14,6 +14,8 @@ from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_tag_background import CTagBackground
 from src.ecs.components.tags.c_tag_blink import CTagBlink
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
+from src.ecs.components.tags.c_tag_header import CTagHeader
+from src.ecs.components.tags.c_tag_key import CTagKey
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_bullet import CTagBullet
 from src.ecs.components.tags.c_tag_explosion import CTagExplosion
@@ -72,20 +74,20 @@ def create_background(world: esper.World, screen:pygame.Surface, fromAxisX =  Fa
     b = random.randint(0, 255)
     start.fill((r,g,b))
     pos = pygame.Vector2(x,y)
-    vel_range = random.randrange(0, surface.height)
+    vel_range = random.randrange(int(surface.height/8), int(surface.height/2))
     velocity = pygame.Vector2(0, vel_range)
     background_entity = create_sprite(world, pos, velocity, start)
     world.add_component(background_entity, CTagBackground())
     
     
-def create_enemy_hunter(world: esper.World, pos: pygame.Vector2, enemy_info: dict):
+def create_enemy_hunter(world: esper.World, pos: pygame.Vector2, enemy_info: dict, enemy_type: str):
     enemy_surface = ServiceLocator.images_service.get(enemy_info["image"])
-    velocity = pygame.Vector2(0, 0)
+    velocity = pygame.Vector2(enemy_info["velocity_waiting"]["x"], enemy_info["velocity_waiting"]["y"])
     enemy_entity = create_sprite(world, pos, velocity, enemy_surface)
-    world.add_component(enemy_entity, CEnemyHunterState(pos))
+    world.add_component(enemy_entity, CEnemyHunterState(pos, enemy_info["score"]))
     world.add_component(enemy_entity,
                         CAnimation(enemy_info["animations"]))
-    world.add_component(enemy_entity, CTagEnemy("Hunter"))
+    world.add_component(enemy_entity, CTagEnemy(enemy_type))
 
 
 def create_player_square(world: esper.World, player_info: dict, screen: pygame.Surface) -> int:
@@ -106,9 +108,9 @@ def create_player_square(world: esper.World, player_info: dict, screen: pygame.S
     return player_entity
 
 
-def create_enemy_spawner(world: esper.World, level_data: dict,screen: pygame.Surface):
+def create_enemy_spawner(world: esper.World, level_data: dict, enemies_data: dict, screen: pygame.Surface):
     spawner_entity = world.create_entity()
-    world.add_component(spawner_entity, CEnemySpawner(level_data,screen))
+    world.add_component(spawner_entity, CEnemySpawner(level_data,enemies_data, screen))
 
 
 def create_input_player(world: esper.World):
@@ -142,9 +144,11 @@ def create_player_bullet(world: esper.World,
 
 
 def create_explosion(world: esper.World, pos: pygame.Vector2, explosion_info: dict):
+
     explosion_surface = ServiceLocator.images_service.get(explosion_info["image"])
+    explosion_surface = pygame.transform.scale_by(explosion_surface, explosion_info["scale"])
     vel = pygame.Vector2(0, 0)
-    pos = pygame.Vector2(pos[0]-10 , pos[1]-5 )
+    pos = pygame.Vector2(pos[0], pos[1] )
     explosion_entity = create_sprite(world, pos, vel, explosion_surface)
     world.add_component(explosion_entity, CTagExplosion())
     world.add_component(explosion_entity,
@@ -182,4 +186,27 @@ def create_key_text(world: esper.World, interface_config_info: dict, key: str):
     world.add_component(entity, CTagText())
     return entity
 
+
+def update_score(world: esper.World, score: int, score_entity:int):
+    txt_s = world.component_for_entity(score_entity, CSurface)
+    txt_t = world.component_for_entity(score_entity, CText)
+    new_score = int(txt_t.text) + score
+    txt_t.text = str(new_score)
+    txt_s.update_text(str(new_score))
+    return new_score
+
+def update_hi_score(world: esper.World, new_score: int, hi_score_entity:int):
+    txt_t = world.component_for_entity(hi_score_entity, CText)
+    if new_score > int(txt_t.text):
+        txt_s = world.component_for_entity(hi_score_entity, CSurface)
+        txt_t.text = str(new_score)
+        txt_s.update_text(str(new_score))
+        return new_score
+    
+def update_level(world: esper.World, level_entity: int):
+    txt_s = world.component_for_entity(level_entity, CSurface)
+    txt_t = world.component_for_entity(level_entity, CText)
+    new_level = int(txt_t.text) + 1
+    txt_t.text = str(new_level)
+    txt_s.update_text(str(new_level).zfill(2))
             

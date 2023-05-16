@@ -1,22 +1,9 @@
 {
-  "banner": {
-    "font": "assets/fnt/PressStart2P.ttf",
-    "text": "Galaxy Game",
-    "size": 20,
-    "color": {
-      "r": 255,
-      "g": 255,
-      "b": 255
-    },
-    "position": {
-      "x": 0,
-      "y": 0
-    }
-  },
-  "keys": {
-    "font": "assets/fnt/PressStart2P.ttf",
-    "text": "Controles: Use las flechas para moverse, click para dispara, P para pausar, Espacio para reanudar",
-    "size": 6,
+  "header": {
+    "type": "text",
+    "font": "assets/fnt/Emulogic-zrEw.ttf",
+    "text": "1UP       HI-SCORE          ",
+    "size": 7,
     "color": {
       "r": 255,
       "g": 0,
@@ -24,21 +11,113 @@
     },
     "position": {
       "x": 0,
-      "y": 15
+      "y": 10
+    },
+    "alignment_x": 0.5
+  },
+  "score": {
+      "type": "text",
+      "font": "assets/fnt/Emulogic-zrEw.ttf",
+      "text": "00",
+      "size": 7,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255
+      },
+      "position": {
+        "x": 0,
+        "y": 20
+      },
+      "alignment_x": 0.25
+  },
+  "hi-score": {
+      "type": "text",
+      "font": "assets/fnt/Emulogic-zrEw.ttf",
+      "text": "5000",
+      "size":7,
+      "color": {
+        "r": 69,
+        "g": 142,
+        "b": 247
+      },
+      "position": {
+        "x": 0,
+        "y": 20
+      },
+      "alignment_x": 0.5
+  },
+  "live-01": {
+    "type": "image",
+    "image": "assets/img/invaders_life.png",
+    "alignment_x": 0.60,
+    "position": {
+      "x": 0,
+      "y": 20
     }
   },
-  "pause": {
-    "font": "assets/fnt/PressStart2P.ttf",
-    "text": "Paused game",
-    "size": 10,
+  "live-02": {
+    "type": "image",
+    "image": "assets/img/invaders_life.png",
+    "alignment_x": 0.63,
+    "position": {
+      "x": 0,
+      "y": 20
+    }
+  },
+  "live-03": {
+    "type": "image",
+    "image": "assets/img/invaders_life.png",
+    "alignment_x": 0.66,
+    "position": {
+      "x": 0,
+      "y": 20
+    }
+  },
+  "level-img": {
+    "type": "image",
+    "image": "assets/img/invaders_level_flag.png",
+    "alignment_x": 0.72,
+    "position": {
+      "x": 0,
+      "y": 20
+    },
+    "scale": 0.9
+  },
+  "level": {
+    "type": "text",
+    "font": "assets/fnt/Emulogic-zrEw.ttf",
+    "text": "01",
+    "size":7,
     "color": {
       "r": 255,
       "g": 255,
       "b": 255
     },
     "position": {
-      "x": 250,
-      "y": 250
-    }
-  }
+      "x": 0,
+      "y": 20
+    },
+    "alignment_x": 0.75
+},
+
+"pause": {
+  "type": "text",
+  "font": "assets/fnt/PressStart2P.ttf",
+  "text": "PAUSE",
+  "size": 10,
+  "color": {
+    "r": 255,
+    "g": 0,
+    "b": 0
+  },
+  "position": {
+    "x": 0,
+    "y": 100
+  },
+  "blink_time": 0.4,
+  "alignment_x": 0.5,
+  "alignment_y": 0.65
 }
+}
+
