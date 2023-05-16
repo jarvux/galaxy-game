@@ -18,15 +18,19 @@ def system_enemy_hunter_state(world: esper.World, player_entity: int, hunter_inf
             _do_enemy_hunter_return(c_st, c_a, c_t, c_v, hunter_info[str(c_te.enemy_type)])	
         elif c_st.state == HunterState.RETURN_HOME:	
             _do_enemy_hunter_return_home(c_st, c_a, c_t, c_v, hunter_info[str(c_te.enemy_type)])	
+
+
 def _do_enemy_hunter_idle(c_st: CEnemyHunterState, c_a: CAnimation, c_t: CTransform,	
                           c_v: CVelocity, pl_t: CTransform, hunter_info: dict):	
     set_animation(c_a, "IDLE")	
-    c_v.vel.x = 0	
-    c_v.vel.y = 0	
+    diff = c_st.start_pos - c_t.pos
+    if diff.magnitude() > hunter_info["return_magnitude"]:
+        c_v.vel *= -1
     dist_to_player = c_t.pos.distance_to(pl_t.pos)	
     if dist_to_player < hunter_info["distance_start_chase"]:	
         ServiceLocator.sounds_service.play(hunter_info["sound_chanse"])	
         c_st.state = HunterState.CHASE	
+
 def _do_enemy_hunter_chase(c_st: CEnemyHunterState, c_a: CAnimation, c_t: CTransform,	
                            c_v: CVelocity, pl_t: CTransform, hunter_info: dict):	
     set_animation(c_a, "MOVE")	
@@ -34,6 +38,7 @@ def _do_enemy_hunter_chase(c_st: CEnemyHunterState, c_a: CAnimation, c_t: CTrans
     dist_to_origin = c_st.start_pos.distance_to(c_t.pos)	
     if dist_to_origin >= hunter_info["distance_start_return"]:	
         c_st.state = HunterState.RETURN	
+
 def _do_enemy_hunter_return(c_st: CEnemyHunterState, c_a: CAnimation,	
                             c_t: CTransform, c_v: CVelocity, hunter_info: dict):	
     set_animation(c_a, "MOVE")	
@@ -42,6 +47,8 @@ def _do_enemy_hunter_return(c_st: CEnemyHunterState, c_a: CAnimation,
     if dist_to_origin <= 2:	
         c_t.pos.xy += c_st.start_pos.xy	
         c_st.state = HunterState.IDLE	
+
+
 def _do_enemy_hunter_return_home(c_st: CEnemyHunterState, c_a: CAnimation,	
                             c_t: CTransform, c_v: CVelocity, hunter_info: dict):	
     set_animation(c_a, "MOVE")	
