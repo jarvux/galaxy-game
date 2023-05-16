@@ -104,8 +104,7 @@ class PlayScene(Scene):
                 system_screen_return_home(self.ecs_world, self.screen)
                 system_enemy_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg)
 
-                system_animation(self.ecs_world, delta_time)
-                
+                system_animation(self.ecs_world, delta_time) 
             else:
                 system_surface_blink(self.ecs_world)
             
