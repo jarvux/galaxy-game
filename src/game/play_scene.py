@@ -7,6 +7,7 @@ from src.ecs.components.tags.c_tag_bullet import CTagBullet
 from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_collision_enemy_bullet import system_collision_enemy_bullet
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
+from src.ecs.systems.s_enemy_hunter_random import system_enemy_hunter_random
 from src.ecs.systems.s_enemies_count import system_enemies_count
 from src.ecs.systems.s_enemy_hunter_state import system_enemy_hunter_state
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
@@ -17,6 +18,7 @@ from src.ecs.systems.s_screen_background import system_screen_background
 from src.ecs.systems.s_screen_bounce import system_screen_bounce
 from src.ecs.systems.s_screen_bullet import system_screen_bullet
 from src.ecs.systems.s_screen_player import system_screen_player
+from src.ecs.systems.s_screen_return import system_screen_return_home
 from src.ecs.systems.s_surface_blink import system_surface_blink
 
 from src.engine.scenes.scene import Scene
@@ -82,7 +84,6 @@ class PlayScene(Scene):
         elif not self.start:
             if not self._paused:
                 system_enemy_spawner(self.ecs_world, self.enemies_cfg,delta_time)
-
                 system_movement(self.ecs_world, delta_time)
                 system_player_bullet(self.ecs_world, self._player_c_t.pos, self._player_c_s.area.size, self.bullet_cfg)
 
@@ -98,6 +99,9 @@ class PlayScene(Scene):
                 system_explosion_kill(self.ecs_world)
                 system_player_state(self.ecs_world)
                 #TODO: PILAS CREAR DIFERENTES ENEMIGOS
+                system_enemy_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg["4"])
+                system_enemy_hunter_random(self.ecs_world, self._player_entity, self.enemies_cfg["4"])
+                system_screen_return_home(self.ecs_world, self.screen)
                 system_enemy_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg)
 
                 system_animation(self.ecs_world, delta_time)
@@ -112,7 +116,6 @@ class PlayScene(Scene):
             system_movement(self.ecs_world, delta_time)
         self.ecs_world._clear_dead_entities()
         self.num_bullets = len(self.ecs_world.get_component(CTagBullet))
-
 
     def do_clean(self):
         self._paused = False
