@@ -38,6 +38,8 @@ class PlayScene(Scene):
         self._paddle_ent = -1
         self._paused = False
         self._num_lives = self.player_cfg["num_lives"]
+        self.wait = False
+        self.start = True
 
     def _load_config_files(self):
         self.window_cfg = ServiceLocator.configs_service.get("assets/cfg/window.json")
@@ -45,8 +47,9 @@ class PlayScene(Scene):
         self.level_01_cfg = ServiceLocator.configs_service.get(self.level_path)
         self.player_cfg = ServiceLocator.configs_service.get("assets/cfg/player.json")
         self.bullet_cfg = ServiceLocator.configs_service.get("assets/cfg/bullet.json")
-        self.explosion_cfg = ServiceLocator.configs_service.get("assets/cfg/explosion.json")
+        self.explosion_cfg = ServiceLocator.configs_service.get("assets/cfg/enemy_explosion.json")
         self.interface_cfg = ServiceLocator.configs_service.get("assets/cfg/interface.json")
+        self.player_explosion_cfg = ServiceLocator.configs_service.get("assets/cfg/player_explosion.json")
 
     def do_create(self):
         
@@ -65,14 +68,15 @@ class PlayScene(Scene):
         
         # This is for start
         ServiceLocator.sounds_service.play(self.window_cfg["start"]["sound"])
-        self.start = True
         self.timestamp = time.time()
+
+
         
     
     def do_update(self, delta_time: float):
         
         system_screen_background(self.ecs_world, self.screen)
-        if self.start:
+        if self.start or self.wait:
             diff = time.time() - self.timestamp
 
         if self.start and diff >= self.window_cfg["start"]["waiting_time"]:
@@ -80,7 +84,8 @@ class PlayScene(Scene):
             self.start = False
             game_start = self.ecs_world.component_for_entity(self.conttrol_items["game_start"], CSurface)
             game_start.visible = False
-
+        elif self.wait and diff >= 5:
+            self.wait = False
         elif not self.start:
             if not self._paused:
                 system_enemy_spawner(self.ecs_world, self.enemies_cfg,delta_time)
@@ -93,7 +98,7 @@ class PlayScene(Scene):
             
 
                 system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg, self.conttrol_items["score"], self.conttrol_items["hi-score"])
-                system_collision_player_enemy(self.ecs_world, self._player_entity, self.level_01_cfg, self.explosion_cfg,
+                system_collision_player_enemy(self.ecs_world, self._player_entity, self.level_01_cfg, self.player_explosion_cfg,
                                             self.screen, self._num_lives, self)
                 
                 system_explosion_kill(self.ecs_world)

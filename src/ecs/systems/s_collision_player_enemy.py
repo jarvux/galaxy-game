@@ -1,5 +1,6 @@
 
 
+import time
 import esper
 import pygame
 from src.ecs.components.c_player_state import CPlayerState
@@ -30,5 +31,7 @@ def system_collision_player_enemy(world: esper.World, player_entity: int,
             create_explosion(world, c_t.pos, explosion_info)
             pl_p.num_lives -= 1
             update_lives(world,pl_p.num_lives)
+            scene.wait = True
+            scene.timestamp = time.time()
             if  pl_p.num_lives == 0 :
                 scene.switch_scene("GAME_OVER_SCENE")

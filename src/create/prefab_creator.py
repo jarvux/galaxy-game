@@ -147,7 +147,8 @@ def create_player_bullet(world: esper.World,
 def create_explosion(world: esper.World, pos: pygame.Vector2, explosion_info: dict):
 
     explosion_surface = ServiceLocator.images_service.get(explosion_info["image"])
-    explosion_surface = pygame.transform.scale_by(explosion_surface, explosion_info["scale"])
+    scale = 1 if explosion_info.get("scale") is None else explosion_info["scale"]
+    explosion_surface = pygame.transform.scale_by(explosion_surface, scale)
     vel = pygame.Vector2(0, 0)
     pos = pygame.Vector2(pos[0], pos[1] )
     explosion_entity = create_sprite(world, pos, vel, explosion_surface)

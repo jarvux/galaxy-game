@@ -1,7 +1,6 @@
 {
-    "sound":"assets/snd/explosion.ogg",
+    "sound":"assets/snd/player_die.ogg",
     "image": "assets/img/invaders_player_explosion.png",
-    "scale": 0.4,
     "animations": {
         "number_frames": 4,
         "list": [
@@ -9,7 +8,7 @@
                 "name": "EXPLODE",
                 "start": 0,
                 "end": 3,
-                "framerate": 16
+                "framerate": 8
             }
         ]
     }
