@@ -3,7 +3,7 @@
 import esper
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
-from src.ecs.components.c_enemy_hunter_state import CEnemyHunterState
+from src.ecs.components.c_enemy_hunter_state import CEnemyHunterState, HunterState
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.ecs.components.tags.c_tag_bullet import CTagBullet
@@ -23,6 +23,7 @@ def system_collision_enemy_bullet(world: esper.World, explosion_info: dict, scor
             if ene_rect.colliderect(bull_rect) and c_b_v.vel.magnitude() != 0:
                 world.delete_entity(enemy_entity)
                 world.delete_entity(bullet_entity)
-                new_score = update_score(world ,c_state.score, score_entity)
+                multiply = 2 if c_state.state != HunterState.IDLE else 1
+                new_score = update_score(world ,c_state.score * multiply, score_entity)
                 update_hi_score(world, new_score, hi_score_entity)
                 create_explosion(world, c_t.pos, explosion_info)
