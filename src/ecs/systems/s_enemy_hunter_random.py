@@ -12,7 +12,7 @@ def system_enemy_hunter_random(world: esper.World, player_entity: int, hunter_in
     pl_t = world.component_for_entity(player_entity, CTransform)
     components = world.get_components(CEnemyHunterState, CAnimation, CTransform, CVelocity)
 
-    if(get_enemy_running(components)<2 ):
+    if(get_enemy_running(components)<2 ) and len(components) > 0 :
         random_index = random.randint(0,len(components)-1)
         _, (c_st, c_a, c_t, c_v) = components[random_index]
         c_st.state = HunterState.CHASE

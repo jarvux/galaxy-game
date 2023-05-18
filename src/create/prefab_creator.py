@@ -225,4 +225,10 @@ def update_level(world: esper.World, level_entity: int):
     new_level = int(txt_t.text) + 1
     txt_t.text = str(new_level)
     txt_s.update_text(str(new_level).zfill(2))
+
+def update_lives(world: esper.World, num_life: int):
+        components = world.get_components(CTagKey, CTagHeader)
+        for entity, (c_k, _) in components:
+            if c_k.key == ('live-0' + (str(num_life))):
+                world.delete_entity(entity)
             
