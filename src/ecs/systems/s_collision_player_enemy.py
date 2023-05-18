@@ -6,7 +6,7 @@ from src.ecs.components.c_player_state import CPlayerState
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
-from src.create.prefab_creator import create_explosion
+from src.create.prefab_creator import create_explosion, update_lives
 from src.engine.scenes.scene import Scene
 
 
@@ -29,5 +29,6 @@ def system_collision_player_enemy(world: esper.World, player_entity: int,
             pl_t.pos.y =  surface.bottom
             create_explosion(world, c_t.pos, explosion_info)
             pl_p.num_lives -= 1
+            update_lives(world,pl_p.num_lives)
             if  pl_p.num_lives == 0 :
                 scene.switch_scene("GAME_OVER_SCENE")

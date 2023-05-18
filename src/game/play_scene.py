@@ -146,3 +146,4 @@ class PlayScene(Scene):
                 if self._paused:
                     ServiceLocator.sounds_service.play(self.window_cfg["pause"]["sound"])
                     
+                    

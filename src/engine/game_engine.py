@@ -94,6 +94,6 @@ class GameEngine:
         self._current_scene.do_action(action)
 
     def _do_clean(self):
-        if self._current_scene is not None:
+        if self._current_scene is not None and self._scene_name_to_switch != "GAME_OVER_SCENE":
             self._current_scene.clean()
         pygame.quit()
