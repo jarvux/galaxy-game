@@ -21,6 +21,7 @@ from src.ecs.systems.s_screen_bullet import system_screen_bullet
 from src.ecs.systems.s_screen_player import system_screen_player
 from src.ecs.systems.s_screen_return import system_screen_return_home
 from src.ecs.systems.s_surface_blink import system_surface_blink
+from src.ecs.systems.s_surface_blink_background import system_surface_blink_background
 
 from src.engine.scenes.scene import Scene
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
@@ -74,6 +75,7 @@ class PlayScene(Scene):
     def do_update(self, delta_time: float):
         
         system_screen_background(self.ecs_world, self.screen)
+        system_surface_blink_background(self.ecs_world)
 
         if self.start or self.wait:
             diff = time.time() - self.timestamp

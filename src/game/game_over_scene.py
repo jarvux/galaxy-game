@@ -2,6 +2,7 @@ import pygame
 from src.ecs.systems.s_movement_background import system_movement_background
 from src.ecs.systems.s_screen_background import system_screen_background
 from src.ecs.systems.s_surface_blink import system_surface_blink
+from src.ecs.systems.s_surface_blink_background import system_surface_blink_background
 
 from src.engine.scenes.scene import Scene
 from src.create.prefab_creator_interface import TextAlignment, create_text
@@ -33,7 +34,7 @@ class GameOverScene(Scene):
             self.switch_scene("MENU_SCENE")
         
     def do_update(self, delta_time: float):
-            
+        system_surface_blink_background(self.ecs_world)
         system_screen_background(self.ecs_world, self.screen)
         system_movement_background(self.ecs_world, delta_time)
 
