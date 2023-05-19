@@ -18,7 +18,7 @@ def system_screen_bounce(world: esper.World, screen: pygame.Surface):
     c_s: CSurface
     for enemy_entity, (c_t, c_v, c_s, c_e) in components:
         # Hunters don't bounce
-        if c_e.enemy_type == "Hunter":
+        if c_e.enemy_type == 1 or c_e.enemy_type == 2 or c_e.enemy_type == 3 or c_e.enemy_type == 4:
             continue
 
         cuad_rect = c_s.area.copy()
@@ -27,7 +27,7 @@ def system_screen_bounce(world: esper.World, screen: pygame.Surface):
             c_v.vel.x *= -1
             cuad_rect.clamp_ip(screen_rect)
             c_t.pos.x = cuad_rect.x
-
+        
         if cuad_rect.top < 0 or cuad_rect.bottom > screen_rect.height:
             c_v.vel.y *= -1
             cuad_rect.clamp_ip(screen_rect)

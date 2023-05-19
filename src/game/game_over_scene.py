@@ -1,8 +1,12 @@
 import pygame
+from src.ecs.systems.s_movement_background import system_movement_background
+from src.ecs.systems.s_screen_background import system_screen_background
+from src.ecs.systems.s_surface_blink import system_surface_blink
 
 from src.engine.scenes.scene import Scene
 from src.create.prefab_creator_interface import TextAlignment, create_text
 from src.ecs.components.c_input_command import CInputCommand
+from src.engine.service_locator import ServiceLocator
 
 class GameOverScene(Scene):
     
@@ -20,6 +24,7 @@ class GameOverScene(Scene):
         quit_to_menu_action = self.ecs_world.create_entity()
         self.ecs_world.add_component(quit_to_menu_action,
                                      CInputCommand("QUIT_TO_MENU", pygame.K_ESCAPE))
+        ServiceLocator.sounds_service.play('assets/snd/game_over.ogg')
         
     def do_action(self, action: CInputCommand):
         if action.name == "RETRY_GAME":
@@ -27,3 +32,8 @@ class GameOverScene(Scene):
         if action.name == "QUIT_TO_MENU":
             self.switch_scene("MENU_SCENE")
         
+    def do_update(self, delta_time: float):
+            
+        system_screen_background(self.ecs_world, self.screen)
+        system_movement_background(self.ecs_world, delta_time)
+

@@ -4,25 +4,27 @@ from src.ecs.components.c_animation import CAnimation, set_animation
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_enemy_hunter_state import CEnemyHunterState, HunterState
+from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.engine.service_locator import ServiceLocator
 
 
 
 def system_enemy_hunter_random(world: esper.World, player_entity: int, hunter_info: dict):
     pl_t = world.component_for_entity(player_entity, CTransform)
-    components = world.get_components(CEnemyHunterState, CAnimation, CTransform, CVelocity)
+    components = world.get_components(CEnemyHunterState, CAnimation, CTransform, CVelocity, CTagEnemy)
 
     if(get_enemy_running(components)<2 ) and len(components) > 0 :
         random_index = random.randint(0,len(components)-1)
-        _, (c_st, c_a, c_t, c_v) = components[random_index]
+        _, (c_st, c_a, c_t, c_v, c_e) = components[random_index]
         c_st.state = HunterState.CHASE
+        ServiceLocator.sounds_service.play(hunter_info[str(c_e.enemy_type)]["sound_chanse"])	
         set_animation(c_a, "MOVE") 
 
 
 def get_enemy_running(components:list):
     cant = 0 
-    for _, (c_st, c_a, c_t, c_v) in components:
-       if c_st.state == HunterState.CHASE :
+    for _, (c_st, c_a, c_t, c_v, c_e) in components:
+       if c_st.state == HunterState.CHASE or c_st.state == HunterState.RETURN:
            cant+=1
      
     return cant
