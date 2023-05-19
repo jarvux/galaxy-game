@@ -5,6 +5,9 @@ from src.engine.service_locator import ServiceLocator
 
 class CEnemySpawner:
      def __init__(self, level_data: dict, enemies_data: dict, screen: pygame.Surface) -> None:
+        self.ref_velocity = -20
+        self.ref_distance = 0
+        self.max_distance = 50
         self.current_time: float = 0
         self.spawn_event_data: list[SpawnEventData] = []
         surface = screen.get_rect()

@@ -12,6 +12,7 @@ from src.ecs.systems.s_enemies_count import system_enemies_count
 from src.ecs.systems.s_enemy_hunter_state import system_enemy_hunter_state
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
+from src.ecs.systems.s_movement_background import system_movement_background
 from src.ecs.systems.s_player_bullet import system_player_bullet
 from src.ecs.systems.s_player_state import system_player_state
 from src.ecs.systems.s_screen_background import system_screen_background
@@ -36,10 +37,7 @@ class PlayScene(Scene):
         self.level_path = level_path
         self._load_config_files()
         self._paddle_ent = -1
-        self._paused = False
         self._num_lives = self.player_cfg["num_lives"]
-        self.wait = False
-        self.start = True
 
     def _load_config_files(self):
         self.window_cfg = ServiceLocator.configs_service.get("assets/cfg/window.json")
@@ -52,7 +50,9 @@ class PlayScene(Scene):
         self.player_explosion_cfg = ServiceLocator.configs_service.get("assets/cfg/player_explosion.json")
 
     def do_create(self):
-        
+        self.wait = False
+        self.start = True
+        self._paused = False
         self._player_entity = create_player_square(self.ecs_world, self.player_cfg,self.screen)
         self._player_c_v = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
         self._player_c_t = self.ecs_world.component_for_entity(self._player_entity, CTransform)
@@ -70,12 +70,11 @@ class PlayScene(Scene):
         ServiceLocator.sounds_service.play(self.window_cfg["start"]["sound"])
         self.timestamp = time.time()
 
-
-        
     
     def do_update(self, delta_time: float):
         
         system_screen_background(self.ecs_world, self.screen)
+
         if self.start or self.wait:
             diff = time.time() - self.timestamp
 
@@ -88,6 +87,7 @@ class PlayScene(Scene):
             self.wait = False
         elif not self.start:
             if not self._paused:
+                
                 system_enemy_spawner(self.ecs_world, self.enemies_cfg,delta_time)
                 system_movement(self.ecs_world, delta_time)
                 system_player_bullet(self.ecs_world, self._player_c_t.pos, self._player_c_s.area.size, self.bullet_cfg)
@@ -111,12 +111,15 @@ class PlayScene(Scene):
                 system_animation(self.ecs_world, delta_time) 
             else:
                 system_surface_blink(self.ecs_world)
+                system_movement_background(self.ecs_world, delta_time)
             
             system_enemies_count(self.ecs_world,  self.level_01_cfg, self.enemies_cfg, self.screen, self.conttrol_items["level"])
         else:
+            
             system_screen_player(self.ecs_world, self.screen)
             system_player_bullet(self.ecs_world, self._player_c_t.pos, self._player_c_s.area.size, self.bullet_cfg)
             system_movement(self.ecs_world, delta_time)
+
         self.ecs_world._clear_dead_entities()
         self.num_bullets = len(self.ecs_world.get_component(CTagBullet))
 

@@ -6,6 +6,9 @@ def system_enemy_spawner(world: esper.World, enemies_data: dict, delta_time: flo
     components = world.get_component(CEnemySpawner)
     c_spw: CEnemySpawner
     for _,  c_spw in components:
+        c_spw.ref_distance += c_spw.ref_velocity * delta_time
+        if abs(c_spw.ref_distance) > abs(c_spw.max_distance):
+            c_spw.ref_velocity *= -1
         c_spw.current_time += delta_time
         spw_evt: SpawnEventData
         for spw_evt in c_spw.spawn_event_data:
