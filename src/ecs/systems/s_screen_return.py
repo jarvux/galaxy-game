@@ -16,7 +16,6 @@ def system_screen_return_home(world: esper.World, screen: pygame.Surface):
         enemy_rect = CSurface.get_area_relative(c_s.area,c_t.pos)
         if not scr_rect.contains(enemy_rect):
            c_st.state = HunterState.RETURN_HOME
-           c_t.pos.x = 0
            c_t.pos.y = 0
         
 

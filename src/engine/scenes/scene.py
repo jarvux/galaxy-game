@@ -2,7 +2,7 @@ import pygame
 import esper
 
 from src.ecs.components.c_input_command import CInputCommand
-from src.ecs.systems.s_input import system_input
+from src.ecs.systems.s_input_player import system_input_player
 from src.ecs.systems.s_rendering import system_rendering
 import src.engine.game_engine
 
@@ -14,7 +14,7 @@ class Scene:
         self.screen_rect = self._game_engine.screen.get_rect()
 
     def do_process_events(self, event:pygame.event):
-        system_input(self.ecs_world, event, self.do_action)
+        system_input_player(self.ecs_world, event, self.do_action)
 
     def simulate(self, delta_time):
         self.do_update(delta_time)
