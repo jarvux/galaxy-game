@@ -75,10 +75,12 @@ def create_background(world: esper.World, screen:pygame.Surface, fromAxisX =  Fa
     b = random.randint(0, 255)
     start.fill((r,g,b))
     pos = pygame.Vector2(x,y)
-    vel_range = random.randrange(int(surface.height/8), int(surface.height/2))
+    vel_range = random.randrange(int(surface.height/8), int(surface.height/4))
     velocity = pygame.Vector2(0, vel_range)
     background_entity = create_sprite(world, pos, velocity, start)
     world.add_component(background_entity, CTagBackground())
+    blink = random.uniform(0.3, 0.5)
+    world.add_component(background_entity, CTagBlink(blink))
     
     
 def create_enemy_hunter(world: esper.World, pos: pygame.Vector2, enemy_info: dict, enemy_type: str):
