@@ -11,7 +11,7 @@ from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 
 def system_enemy_hunter_state(world: esper.World, player_entity: int, hunter_info: dict):	
     pl_t = world.component_for_entity(player_entity, CTransform)	
-    components = world.get_components(CEnemyHunterState, CAnimation, CTransform, CVelocity,CTagEnemy)	
+    components = world.get_components(CEnemyHunterState, CAnimation, CTransform, CVelocity, CTagEnemy)
     spawer = world.get_component(CEnemySpawner)
     for _, (c_st, c_a, c_t, c_v,c_te) in components:	
         for _, (c_e_s) in spawer:	
@@ -55,7 +55,7 @@ def _do_enemy_hunter_return(c_st: CEnemyHunterState, c_a: CAnimation,
                             c_t: CTransform, c_v: CVelocity, hunter_info: dict):	
     set_animation(c_a, "MOVE")	
     dist_to_origin = c_st.start_pos.distance_to(c_t.pos)	
-    if dist_to_origin <= 2:	
+    if dist_to_origin <= 2:
         c_t.pos.xy += c_st.start_pos.xy	
         c_st.angle = math.pi 
         c_st.state = HunterState.RETURN_HOME	

@@ -15,6 +15,7 @@ from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_tag_background import CTagBackground
 from src.ecs.components.tags.c_tag_blink import CTagBlink
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
+from src.ecs.components.tags.c_tag_enemy_bullet import CTagEnemyBullet
 from src.ecs.components.tags.c_tag_header import CTagHeader
 from src.ecs.components.tags.c_tag_key import CTagKey
 from src.ecs.components.tags.c_tag_player import CTagPlayer
@@ -62,27 +63,28 @@ def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dic
     world.add_component(enemy_entity, CTagEnemy("Bouncer"))
     ServiceLocator.sounds_service.play(enemy_info["sound"])
 
-def create_background(world: esper.World, screen:pygame.Surface, fromAxisX =  False):
+
+def create_background(world: esper.World, screen: pygame.Surface, fromAxisX=False):
     surface = screen.get_rect()
     start = pygame.Surface((1, 1))
-    if fromAxisX :
-        y=0
+    if fromAxisX:
+        y = 0
     else:
-        y=random.randrange(0,surface.width)
-    x=random.randrange(0,surface.width)
+        y = random.randrange(0, surface.width)
+    x = random.randrange(0, surface.width)
     r = random.randint(0, 255)
     g = random.randint(0, 255)
     b = random.randint(0, 255)
-    start.fill((r,g,b))
-    pos = pygame.Vector2(x,y)
-    vel_range = random.randrange(int(surface.height/8), int(surface.height/4))
+    start.fill((r, g, b))
+    pos = pygame.Vector2(x, y)
+    vel_range = random.randrange(int(surface.height / 8), int(surface.height / 4))
     velocity = pygame.Vector2(0, vel_range)
     background_entity = create_sprite(world, pos, velocity, start)
     world.add_component(background_entity, CTagBackground())
     blink = random.uniform(0.3, 0.5)
     world.add_component(background_entity, CTagBlink(blink))
-    
-    
+
+
 def create_enemy_hunter(world: esper.World, pos: pygame.Vector2, enemy_info: dict, enemy_type: str):
     enemy_surface = ServiceLocator.images_service.get(enemy_info["image"])
     velocity = pygame.Vector2(enemy_info["velocity_waiting"]["x"], enemy_info["velocity_waiting"]["y"])
@@ -95,7 +97,7 @@ def create_enemy_hunter(world: esper.World, pos: pygame.Vector2, enemy_info: dic
 
 def create_player_square(world: esper.World, player_info: dict, screen: pygame.Surface) -> int:
     player_sprite = ServiceLocator.images_service.get(player_info["image"])
-    #player_sprite = pygame.transform.scale_by(player_sprite, player_info["scale"])
+    # player_sprite = pygame.transform.scale_by(player_sprite, player_info["scale"])
     surface = screen.get_rect()
     size = player_sprite.get_size()
     size = (size[0] / player_info["animations"]["number_frames"], size[1])
@@ -113,7 +115,7 @@ def create_player_square(world: esper.World, player_info: dict, screen: pygame.S
 
 def create_enemy_spawner(world: esper.World, level_data: dict, enemies_data: dict, screen: pygame.Surface):
     spawner_entity = world.create_entity()
-    world.add_component(spawner_entity, CEnemySpawner(level_data,enemies_data, screen))
+    world.add_component(spawner_entity, CEnemySpawner(level_data, enemies_data, screen))
 
 
 def create_input_player(world: esper.World):
@@ -133,26 +135,39 @@ def create_input_player(world: esper.World):
 
 
 def create_player_bullet(world: esper.World,
-                  player_pos: pygame.Vector2,
-                  player_size: pygame.Vector2,
-                  bullet_info: dict):
+                         player_pos: pygame.Vector2,
+                         player_size: pygame.Vector2,
+                         bullet_info: dict):
     bullet_size = pygame.Vector2(bullet_info["width"], bullet_info["height"])
     pos = pygame.Vector2(player_pos.x + (player_size[0] / 2) - (bullet_info["width"] / 2),
                          player_pos.y - bullet_info["height"])
-    vel = pygame.Vector2(0,0)
-    col = pygame.Color(bullet_info["color"]["r"],bullet_info["color"]["g"],bullet_info["color"]["b"])
-    bullet_entity = create_square(world,bullet_size, pos, vel, col)
+    vel = pygame.Vector2(0, 0)
+    col = pygame.Color(bullet_info["color"]["r"], bullet_info["color"]["g"], bullet_info["color"]["b"])
+    bullet_entity = create_square(world, bullet_size, pos, vel, col)
     world.add_component(bullet_entity, CTagBullet())
     world.add_component(bullet_entity, CBulletState())
 
 
-def create_explosion(world: esper.World, pos: pygame.Vector2, explosion_info: dict):
+def create_enemy_bullet(world: esper.World,
+                        player_pos: pygame.Vector2,
+                        player_size: pygame.Vector2,
+                        bullet_info: dict):
+    bullet_size = pygame.Vector2(bullet_info["width"], bullet_info["height"])
+    pos = pygame.Vector2(player_pos.x + (player_size[0] / 2) - (bullet_info["width"] / 2),
+                         player_pos.y - bullet_info["height"])
+    vel = pygame.Vector2(0, 0)
+    col = pygame.Color(bullet_info["color"]["r"], bullet_info["color"]["g"], bullet_info["color"]["b"])
+    bullet_entity = create_square(world, bullet_size, pos, vel, col)
+    world.add_component(bullet_entity, CTagEnemyBullet())
+    world.add_component(bullet_entity, CBulletState())
 
+
+def create_explosion(world: esper.World, pos: pygame.Vector2, explosion_info: dict):
     explosion_surface = ServiceLocator.images_service.get(explosion_info["image"])
     scale = 1 if explosion_info.get("scale") is None else explosion_info["scale"]
     explosion_surface = pygame.transform.scale_by(explosion_surface, scale)
     vel = pygame.Vector2(0, 0)
-    pos = pygame.Vector2(pos[0], pos[1] )
+    pos = pygame.Vector2(pos[0], pos[1])
     explosion_entity = create_sprite(world, pos, vel, explosion_surface)
     world.add_component(explosion_entity, CTagExplosion())
     world.add_component(explosion_entity,
@@ -191,7 +206,7 @@ def create_key_text(world: esper.World, interface_config_info: dict, key: str):
     return entity
 
 
-def update_score(world: esper.World, score: int, score_entity:int):
+def update_score(world: esper.World, score: int, score_entity: int):
     txt_s = world.component_for_entity(score_entity, CSurface)
     txt_t = world.component_for_entity(score_entity, CText)
     new_score = int(txt_t.text) + score
@@ -199,18 +214,19 @@ def update_score(world: esper.World, score: int, score_entity:int):
     txt_s.update_text(str(new_score))
     return new_score
 
-def update_hi_score(world: esper.World, new_score: int, hi_score_entity:int):
+
+def update_hi_score(world: esper.World, new_score: int, hi_score_entity: int):
     txt_t = world.component_for_entity(hi_score_entity, CText)
     if new_score > int(txt_t.text):
         txt_s = world.component_for_entity(hi_score_entity, CSurface)
         txt_t.text = str(new_score)
         txt_s.update_text(str(new_score))
-        
+
         # Writing new scores in the files
         interface_info = ServiceLocator.configs_service.get("assets/cfg/interface.json")
         menu_info = ServiceLocator.configs_service.get("assets/cfg/menu.json")
-        interface_info["hi-score"]["text"]=str(new_score)
-        menu_info["line2center"]["text"]=str(new_score)
+        interface_info["hi-score"]["text"] = str(new_score)
+        menu_info["line2center"]["text"] = str(new_score)
 
         with open("assets/cfg/interface.json", "w") as write_file:
             json.dump(interface_info, write_file)
@@ -219,9 +235,10 @@ def update_hi_score(world: esper.World, new_score: int, hi_score_entity:int):
 
         ServiceLocator.configs_service.update("assets/cfg/interface.json", interface_info)
         ServiceLocator.configs_service.update("assets/cfg/menu.json", menu_info)
-        
+
         return new_score
-    
+
+
 def update_level(world: esper.World, level_entity: int):
     txt_s = world.component_for_entity(level_entity, CSurface)
     txt_t = world.component_for_entity(level_entity, CText)
@@ -229,9 +246,9 @@ def update_level(world: esper.World, level_entity: int):
     txt_t.text = str(new_level)
     txt_s.update_text(str(new_level).zfill(2))
 
+
 def update_lives(world: esper.World, num_life: int):
-        components = world.get_components(CTagKey, CTagHeader)
-        for entity, (c_k, _) in components:
-            if c_k.key == ('live-0' + (str(num_life))):
-                world.delete_entity(entity)
-            
+    components = world.get_components(CTagKey, CTagHeader)
+    for entity, (c_k, _) in components:
+        if c_k.key == ('live-0' + (str(num_life))):
+            world.delete_entity(entity)
