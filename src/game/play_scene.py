@@ -137,12 +137,12 @@ class PlayScene(Scene):
 
     def do_action(self, action: CInputCommand):
         if not self._paused:
-            if action.name == "PLAYER_LEFT":
+            if action.name == "PLAYER_LEFT" or action.name == "PLAYER_LEFT_A":
                 if action.phase == CommandPhase.START:
                     self._player_c_v.vel.x -= self.player_cfg["input_velocity"]
                 elif action.phase == CommandPhase.END:
                     self._player_c_v.vel.x += self.player_cfg["input_velocity"]
-            if action.name == "PLAYER_RIGHT":
+            if action.name == "PLAYER_RIGHT" or action.name == "PLAYER_RIGHT_D":
                 if action.phase == CommandPhase.START:
                     self._player_c_v.vel.x += self.player_cfg["input_velocity"]
                 elif action.phase == CommandPhase.END:

@@ -123,15 +123,17 @@ def create_input_player(world: esper.World):
     input_right = world.create_entity()
     input_p = world.create_entity()
     input_z = world.create_entity()
-    world.add_component(input_left,
-                        CInputCommand("PLAYER_LEFT", pygame.K_LEFT))
-    world.add_component(input_right,
-                        CInputCommand("PLAYER_RIGHT", pygame.K_RIGHT))
+    input_a = world.create_entity()
+    input_d = world.create_entity()
 
-    world.add_component(input_p,
-                        CInputCommand("P_DOWN", pygame.K_p))
-    world.add_component(input_z,
-                        CInputCommand("PLAYER_FIRE", pygame.K_z))
+    world.add_component(input_left, CInputCommand("PLAYER_LEFT", pygame.K_LEFT))
+    world.add_component(input_right, CInputCommand("PLAYER_RIGHT", pygame.K_RIGHT))
+
+    world.add_component(input_p, CInputCommand("P_DOWN", pygame.K_p))
+    world.add_component(input_z, CInputCommand("PLAYER_FIRE", pygame.K_z))
+
+    world.add_component(input_a, CInputCommand("PLAYER_LEFT_A", pygame.K_a))
+    world.add_component(input_d, CInputCommand("PLAYER_RIGHT_D", pygame.K_d))
 
 
 def create_player_bullet(world: esper.World,
